@@ -1,0 +1,10 @@
+{
+  "name": "aiFood",
+  "version": "1.0.0",
+  "description": "AI 拍照识别食物并估算热量",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3",
+    "axios": "^1.6.0"
+  }
+}

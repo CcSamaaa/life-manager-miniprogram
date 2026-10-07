@@ -1,0 +1,172 @@
+<view class="tarot-page">
+
+  <!-- ================= 步骤一：选择牌阵 ================= -->
+  <block wx:if="{{step === 'spread'}}">
+    <view class="hero">
+      <view class="hero-mark">✦</view>
+      <view class="hero-title">塔罗占卜</view>
+      <view class="hero-sub">凝神，选一阵，听牌说话</view>
+    </view>
+
+    <view class="spread-list">
+      <view
+        wx:for="{{spreads}}"
+        wx:key="key"
+        class="spread-card"
+        bindtap="selectSpread"
+        data-idx="{{index}}"
+      >
+        <view class="spread-top">
+          <text class="spread-name">{{item.name}}</text>
+          <text class="spread-count">{{item.count}} 张</text>
+        </view>
+        <view class="spread-desc">{{item.desc}}</view>
+        <view class="spread-go">选此阵 ›</view>
+      </view>
+    </view>
+  </block>
+
+  <!-- ================= 步骤二：聚焦 / 默念问题 ================= -->
+  <block wx:if="{{step === 'focus'}}">
+    <view class="hero">
+      <view class="hero-back" bindtap="backToSpread">‹ 换牌阵</view>
+      <view class="hero-title">{{selectedSpread.name}}</view>
+      <view class="hero-sub">{{selectedSpread.desc}}</view>
+    </view>
+
+    <view class="focus-card">
+      <view class="focus-label">在心中默念你的问题（可不填）</view>
+      <textarea
+        class="focus-input"
+        placeholder="例如：这段关系会走向哪里？"
+        placeholder-class="focus-ph"
+        value="{{question}}"
+        bindinput="onQuestion"
+        maxlength="40"
+      />
+
+      <view class="focus-label" style="margin-top:28rpx;">关注的领域</view>
+      <view class="chip-row">
+        <view
+          wx:for="{{categories}}"
+          wx:key="*this"
+          class="chip {{category === item ? 'chip-on' : ''}}"
+          bindtap="onCategory"
+          data-cat="{{item}}"
+        >{{item}}</view>
+      </view>
+
+      <view class="draw-btn" bindtap="startDraw">🔮 洗牌 · 抽 {{selectedSpread.count}} 张</view>
+    </view>
+  </block>
+
+  <!-- ================= 步骤三：抽牌 ================= -->
+  <block wx:if="{{step === 'draw'}}">
+    <view class="hero">
+      <view class="hero-back" bindtap="backToSpread">‹ 换牌阵</view>
+      <view class="hero-title">{{selectedSpread.name}}</view>
+      <view class="hero-sub">轻触牌堆，依次抽取 {{selectedSpread.count}} 张 · 已抽 {{drawnCount}}/{{selectedSpread.count}}</view>
+    </view>
+
+    <!-- 洗牌中 -->
+    <view wx:if="{{shuffling}}" class="deck-area">
+      <view class="deck deck-shuffle">✦</view>
+      <view class="deck-tip">正在洗牌…</view>
+    </view>
+
+    <!-- 抽牌中 -->
+    <view wx:else class="deck-area">
+      <view
+        class="deck {{drawnCount >= plan.length ? 'deck-done' : ''}}"
+        bindtap="drawCard"
+      >
+        <view class="deck-inner">✦</view>
+      </view>
+      <view class="deck-tip" wx:if="{{drawnCount < plan.length}}">轻触牌堆，抽第 {{drawnCount + 1}} 张</view>
+      <view class="deck-tip" wx:else>牌已抽齐，正在解签…</view>
+    </view>
+
+    <!-- 位置槽 -->
+    <view class="slot-wrap slot-{{plan.length}}">
+      <view wx:for="{{plan}}" wx:key="posName" class="slot">
+        <view class="slot-pos">{{item.posName}}</view>
+        <view class="mini-card {{item.revealed ? 'flipped' : ''}} {{item.reversed ? 'is-rev' : ''}}">
+          <view wx:if="{{item.revealed}}" class="mini-face">
+            <view class="mini-sym">{{item.label.symbol}}</view>
+            <view class="mini-name">{{item.label.name}}</view>
+            <view class="mini-orient {{item.reversed ? 'rev' : 'upr'}}">{{item.reversed ? '逆位' : '正位'}}</view>
+          </view>
+          <view wx:else class="mini-back">✦</view>
+        </view>
+      </view>
+    </view>
+  </block>
+
+  <!-- ================= 步骤四：解签 ================= -->
+  <block wx:if="{{step === 'result'}}">
+    <view class="hero">
+      <view class="hero-back" bindtap="backToSpread">‹ 换牌阵</view>
+      <view class="hero-title">你的牌阵</view>
+      <view class="hero-sub">{{selectedSpread.name}} · {{category}}<text wx:if="{{question}}"> · {{question}}</text></view>
+    </view>
+
+    <view class="reading">
+      <view wx:for="{{interpretations}}" wx:key="position" class="read-block">
+        <view class="read-pos">{{item.position}}</view>
+        <view class="read-pos-hint">{{item.hint}}</view>
+        <view class="read-card {{item.orient === '逆位' ? 'is-rev' : ''}}">
+          <text class="read-card-name">{{item.cardName}}</text>
+          <text class="read-card-orient {{item.orient === '逆位' ? 'rev' : 'upr'}}">{{item.orient}}</text>
+        </view>
+        <view class="read-meaning">{{item.meaning}}</view>
+      </view>
+    </view>
+
+    <view class="summary-card">
+      <view class="summary-title">整体解读</view>
+      <view class="summary-text">{{summary}}</view>
+    </view>
+
+    <view class="result-btns">
+      <view class="btn-ghost" bindtap="backToSpread">换牌阵</view>
+      <view class="btn-gold" bindtap="reset">重新占卜</view>
+    </view>
+
+    <view class="ai-enter" bindtap="openAiChat">✨ 让 AI 结合牌面为你解读</view>
+  </block>
+
+  <!-- ================= AI 解读 / 追问对话框 ================= -->
+  <view wx:if="{{showChat}}" class="chat-mask" bindtap="closeChat">
+    <view class="chat-panel" catchtap="stopProp">
+      <view class="chat-head">
+        <view class="chat-title">🔮 AI 塔罗解读</view>
+        <view class="chat-close" bindtap="closeChat">✕</view>
+      </view>
+
+      <scroll-view class="chat-body" scroll-y scroll-into-view="{{scrollIntoId}}" scroll-with-animation>
+        <view wx:for="{{chatMessages}}" wx:key="index" id="msg-{{index}}" class="chat-row {{item.role}}">
+          <view class="bubble">{{item.content}}</view>
+        </view>
+        <view wx:if="{{aiLoading}}" class="chat-row assistant">
+          <view class="bubble loading">解读中…</view>
+        </view>
+      </scroll-view>
+
+      <view wx:if="{{aiMock}}" class="chat-tip">演示模式：未配置 AI 密钥，已返回示例解读。在云函数 aiTarot 的环境变量中配置 AI_API_KEY 后即可体验真实对话。</view>
+
+      <view class="chat-bar">
+        <input
+          class="chat-input"
+          value="{{chatInput}}"
+          bindinput="onChatInput"
+          placeholder="想就这张牌追问点什么…"
+          placeholder-class="chat-ph"
+          confirm-type="send"
+          bindconfirm="sendFollowUp"
+        />
+        <view class="chat-send {{aiLoading ? 'disabled' : ''}}" bindtap="sendFollowUp">发送</view>
+      </view>
+    </view>
+  </view>
+
+</view>

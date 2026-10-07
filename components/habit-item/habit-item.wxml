@@ -1,0 +1,14 @@
+<view class="habit-item {{actionable ? 'actionable' : ''}}" bindtap="onTap">
+  <view class="emoji">{{emoji}}</view>
+  <view class="info">
+    <view class="name">{{name}}</view>
+    <view class="sub">
+      <text wx:if="{{targetType === 'daily'}}">{{doneToday ? '今日已打卡' : '今日待打卡'}}</text>
+      <text wx:else>本周 {{weeklyDone}}/{{weeklyTarget}}</text>
+    </view>
+  </view>
+  <view class="badge {{ (targetType === 'daily' && doneToday) || (targetType === 'weekly' && weeklyDone >= weeklyTarget) ? 'done' : '' }}">
+    <text wx:if="{{targetType === 'daily'}}">{{doneToday ? '✓' : ''}}</text>
+    <text wx:else>{{weeklyDone >= weeklyTarget ? '✓' : weeklyDone}}</text>
+  </view>
+</view>

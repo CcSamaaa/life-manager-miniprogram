@@ -1,0 +1,7 @@
+{
+  "usingComponents": {
+    "habit-item": "/components/habit-item/habit-item"
+  },
+  "navigationBarTitleText": "今天",
+  "enablePullDownRefresh": true
+}

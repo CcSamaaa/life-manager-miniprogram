@@ -1,0 +1,532 @@
+/* ====== 基础 ====== */
+.page {
+  min-height: 100vh;
+  padding: 20rpx 0 60rpx;
+  background: #f5f5f5;
+}
+
+.hero {
+  padding: 36rpx 40rpx 16rpx;
+}
+.hero-title {
+  font-size: 44rpx;
+  font-weight: 700;
+  color: #1f1f1f;
+  letter-spacing: 4rpx;
+}
+.hero-sub {
+  margin-top: 8rpx;
+  font-size: 24rpx;
+  color: #9aa0a6;
+}
+
+/* ====== 投卦控制区 ====== */
+.cast-card {
+  margin: 16rpx 24rpx;
+  background: #fff;
+  border-radius: 20rpx;
+  padding: 36rpx 24rpx 32rpx;
+  text-align: center;
+  box-shadow: 0 2rpx 12rpx rgba(0,0,0,0.04);
+}
+.dice-row {
+  display: flex;
+  justify-content: center;
+  gap: 28rpx;
+  margin-bottom: 24rpx;
+}
+.dice {
+  width: 110rpx;
+  height: 110rpx;
+  border-radius: 22rpx;
+  background: linear-gradient(145deg, #ffffff, #eef0f3);
+  box-shadow: inset 0 2rpx 6rpx rgba(0,0,0,0.06), 0 4rpx 10rpx rgba(0,0,0,0.06);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2rpx solid #e6e8eb;
+}
+.dice.rolling {
+  animation: shake 0.18s linear infinite;
+}
+@keyframes shake {
+  0% { transform: translateY(0) rotate(0deg); }
+  25% { transform: translateY(-6rpx) rotate(-6deg); }
+  50% { transform: translateY(0) rotate(0deg); }
+  75% { transform: translateY(-6rpx) rotate(6deg); }
+  100% { transform: translateY(0) rotate(0deg); }
+}
+.dice-num {
+  font-size: 56rpx;
+  font-weight: 700;
+  color: #2b2b2b;
+}
+.cast-tip {
+  font-size: 24rpx;
+  color: #9aa0a6;
+  margin-bottom: 20rpx;
+}
+.btn-cast {
+  background: #07c160;
+  color: #fff;
+  font-size: 32rpx;
+  font-weight: 600;
+  border-radius: 999rpx;
+  padding: 16rpx 0;
+  width: 80%;
+  margin: 0 auto;
+}
+.btn-cast[disabled] {
+  opacity: 0.6;
+}
+
+/* ====== 通用结果卡片 ====== */
+.g-card {
+  margin: 20rpx 24rpx;
+  background: #fff;
+  border-radius: 20rpx;
+  padding: 28rpx 24rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0,0,0,0.04);
+}
+
+/* 本/变卦头部 */
+.g-head {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  border-bottom: 1rpx solid #f0f1f3;
+  padding-bottom: 16rpx;
+}
+.g-tag {
+  font-size: 22rpx;
+  color: #fff;
+  background: #9aa0a6;
+  border-radius: 999rpx;
+  padding: 4rpx 16rpx;
+  margin-right: 14rpx;
+}
+.g-tag.bian {
+  background: #d4a853;
+}
+.g-name {
+  font-size: 40rpx;
+  font-weight: 700;
+  color: #1f1f1f;
+  letter-spacing: 4rpx;
+}
+.g-meta {
+  width: 100%;
+  margin-top: 8rpx;
+  font-size: 22rpx;
+  color: #9aa0a6;
+}
+
+/* 卦象符号 */
+.g-trigram {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16rpx;
+  margin: 20rpx 0;
+}
+.tg {
+  font-size: 80rpx;
+  line-height: 1;
+  color: #2b2b2b;
+}
+.tg-sub {
+  font-size: 20rpx;
+  color: #9aa0a6;
+}
+
+/* 六爻条 */
+.yao-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14rpx;
+  align-items: center;
+}
+.yao-row {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  width: 100%;
+  justify-content: center;
+}
+.yao {
+  width: 200rpx;
+  height: 28rpx;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.yao-line {
+  width: 100%;
+  height: 14rpx;
+  border-radius: 7rpx;
+  background: #3a3a3a;
+}
+.yao.yin .yao-line.half {
+  width: 44%;
+}
+.yao.laoyang .yao-line {
+  background: #d4a853;
+}
+.yao.laoyin .yao-line {
+  background: #3a6ea5;
+}
+.yao.changing {
+  box-shadow: 0 0 0 3rpx rgba(224,120,112,0.5);
+  border-radius: 8rpx;
+}
+.yao-side {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 110rpx;
+}
+.yao-label {
+  font-size: 26rpx;
+  font-weight: 600;
+  color: #1f1f1f;
+}
+.yao-type {
+  font-size: 20rpx;
+  color: #9aa0a6;
+}
+.yao-type.chg {
+  color: #d4a853;
+  font-weight: 600;
+}
+
+/* ====== 断卦 ====== */
+.sec-title {
+  font-size: 30rpx;
+  font-weight: 700;
+  color: #1f1f1f;
+  margin-bottom: 16rpx;
+  padding-left: 14rpx;
+  border-left: 6rpx solid #d4a853;
+}
+.sec-title.link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-left: none;
+  padding-left: 0;
+}
+.arrow {
+  font-size: 24rpx;
+  color: #07c160;
+  font-weight: 400;
+}
+.row-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-left: 6rpx solid #d4a853;
+}
+.clear-btn {
+  font-size: 24rpx;
+  color: #e07870;
+  font-weight: 400;
+}
+.rule-box {
+  background: #fbf6ec;
+  border-radius: 12rpx;
+  padding: 18rpx 20rpx;
+  margin-bottom: 18rpx;
+}
+.rule-label {
+  display: block;
+  font-size: 22rpx;
+  color: #b8860b;
+  margin-bottom: 6rpx;
+}
+.rule-text {
+  font-size: 28rpx;
+  color: #7a5a12;
+  font-weight: 600;
+}
+.jue-row {
+  padding: 16rpx 0;
+  border-bottom: 1rpx solid #f0f1f3;
+}
+.jue-row:last-child {
+  border-bottom: none;
+}
+.jue-title {
+  font-size: 26rpx;
+  color: #1f1f1f;
+  font-weight: 600;
+  margin-bottom: 6rpx;
+}
+.jue-title.main {
+  color: #d4a853;
+}
+.jue-text {
+  font-size: 27rpx;
+  color: #444;
+  line-height: 1.7;
+}
+.image-line {
+  margin-top: 16rpx;
+  font-size: 24rpx;
+  color: #9aa0a6;
+  line-height: 1.6;
+}
+
+/* 卦象白话解释（卡片内） */
+.plain-box {
+  margin: 18rpx 0 6rpx;
+  background: #fbf6ec;
+  border-left: 6rpx solid #d4a853;
+  border-radius: 10rpx;
+  padding: 18rpx 20rpx;
+  font-size: 27rpx;
+  color: #6b5526;
+  line-height: 1.75;
+}
+.plain-box.alt {
+  background: #f0f6f1;
+  border-left-color: #07c160;
+  color: #2f6b43;
+}
+
+/* 断卦白话解释（每条辞下方） */
+.jue-plain {
+  margin-top: 12rpx;
+  background: #f7f8fa;
+  border-radius: 10rpx;
+  padding: 16rpx 18rpx;
+  font-size: 27rpx;
+  color: #555;
+  line-height: 1.75;
+}
+
+/* ====== 投掷明细 ====== */
+.dt-row {
+  display: flex;
+  align-items: center;
+  padding: 12rpx 0;
+  border-bottom: 1rpx solid #f5f5f5;
+}
+.dt-label {
+  width: 90rpx;
+  font-size: 26rpx;
+  font-weight: 600;
+  color: #1f1f1f;
+}
+.dt-dice {
+  flex: 1;
+  display: flex;
+  gap: 12rpx;
+}
+.dt-d {
+  width: 44rpx;
+  height: 44rpx;
+  line-height: 44rpx;
+  text-align: center;
+  border-radius: 10rpx;
+  background: #f0f1f3;
+  font-size: 26rpx;
+  color: #333;
+}
+.dt-type {
+  font-size: 24rpx;
+  color: #9aa0a6;
+  width: 90rpx;
+  text-align: right;
+}
+.dt-type.chg {
+  color: #d4a853;
+  font-weight: 600;
+}
+
+/* ====== 六爻排盘 ====== */
+.pt-row {
+  display: flex;
+  align-items: stretch;
+  border-bottom: 1rpx solid #f0f1f3;
+}
+.pt-row.alt {
+  background: #fafafa;
+}
+.pt-head {
+  background: #fbf6ec;
+  border-bottom: 1rpx solid #f0e6cf;
+}
+.pt-head .pt-label,
+.pt-head .c-god,
+.pt-head .c-six,
+.pt-head .c-na,
+.pt-head .pt-line {
+  font-size: 22rpx;
+  color: #b8860b;
+  font-weight: 600;
+}
+.pt-yao {
+  flex: 0 0 130rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4rpx;
+  padding: 14rpx 4rpx;
+}
+.pt-label {
+  font-size: 26rpx;
+  font-weight: 600;
+  color: #1f1f1f;
+}
+.pt-role {
+  font-size: 22rpx;
+  font-weight: 700;
+  padding: 0 10rpx;
+  border-radius: 999rpx;
+  color: #fff;
+}
+.role-shi {
+  background: #07c160;
+}
+.role-ying {
+  background: #3a6ea5;
+}
+.pt-info {
+  flex: 0 0 200rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4rpx;
+  padding: 14rpx 4rpx;
+  border-left: 1rpx solid #f0f1f3;
+}
+.c-god { font-size: 24rpx; color: #e07870; }
+.c-six { font-size: 24rpx; color: #1f1f1f; font-weight: 600; }
+.c-na { font-size: 24rpx; color: #3a3a3a; font-weight: 600; }
+.c-na.wood { color: #3B6D11; }
+.c-na.fire { color: #A32D2D; }
+.c-na.earth { color: #854F0B; }
+.c-na.metal { color: #633806; }
+.c-na.water { color: #0C447C; }
+.pt-line {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  padding: 14rpx 16rpx;
+  font-size: 22rpx;
+  color: #666;
+  line-height: 1.5;
+  border-left: 1rpx solid #f0f1f3;
+}
+.pt-foot {
+  margin-top: 14rpx;
+  font-size: 22rpx;
+  color: #9aa0a6;
+  text-align: center;
+}
+
+/* ====== 历史记录 ====== */
+.hist-row {
+  display: flex;
+  align-items: center;
+  padding: 18rpx 0;
+  border-bottom: 1rpx solid #f0f1f3;
+}
+.hist-row:last-child {
+  border-bottom: none;
+}
+.hist-sym {
+  flex: 0 0 140rpx;
+  display: flex;
+  flex-direction: column;
+}
+.hs-main {
+  font-size: 40rpx;
+  color: #2b2b2b;
+  line-height: 1.1;
+}
+.hs-chg {
+  font-size: 22rpx;
+  color: #d4a853;
+  margin-top: 4rpx;
+}
+.hist-info {
+  flex: 1;
+  padding: 0 12rpx;
+}
+.hist-name {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #1f1f1f;
+}
+.hist-to {
+  font-size: 24rpx;
+  color: #d4a853;
+  font-weight: 400;
+}
+.hist-rule {
+  margin-top: 6rpx;
+  font-size: 22rpx;
+  color: #9aa0a6;
+}
+.hist-time {
+  flex: 0 0 120rpx;
+  text-align: right;
+  font-size: 22rpx;
+  color: #bbb;
+}
+
+.disclaimer {
+  margin: 24rpx 40rpx;
+  font-size: 20rpx;
+  color: #bbb;
+  line-height: 1.6;
+  text-align: center;
+}
+
+/* ===== 深色模式 ===== */
+.page.dark { background: #15171a; }
+.page.dark .hero-title { color: #f0f2f5; }
+.page.dark .hero-sub { color: #8b9098; }
+.page.dark .cast-card { background: #23262b; box-shadow: 0 2rpx 12rpx rgba(0,0,0,0.3); }
+.page.dark .dice { background: linear-gradient(145deg, #2b2f36, #1c2024); border-color: #3a3f47; box-shadow: inset 0 2rpx 6rpx rgba(0,0,0,0.2); }
+.page.dark .dice-num { color: #e6e8eb; }
+.page.dark .cast-tip { color: #8b9098; }
+.page.dark .g-card { background: #23262b; box-shadow: 0 2rpx 12rpx rgba(0,0,0,0.3); }
+.page.dark .g-head { border-bottom: 1rpx solid #2b2f36; }
+.page.dark .g-name { color: #f0f2f5; }
+.page.dark .g-meta { color: #8b9098; }
+.page.dark .tg { color: #e6e8eb; }
+.page.dark .tg-sub { color: #8b9098; }
+.page.dark .yao-label { color: #f0f2f5; }
+.page.dark .sec-title { color: #f0f2f5; }
+.page.dark .rule-box { background: #2a2418; }
+.page.dark .rule-text { color: #d4a853; }
+.page.dark .jue-row { border-bottom: 1rpx solid #2b2f36; }
+.page.dark .jue-title { color: #f0f2f5; }
+.page.dark .jue-text { color: #c8ccd2; }
+.page.dark .image-line { color: #8b9098; }
+.page.dark .plain-box { background: #2a2418; color: #cdb27a; }
+.page.dark .plain-box.alt { background: #1c2a22; color: #7fcf9e; }
+.page.dark .jue-plain { background: #2b2f36; color: #c8ccd2; }
+.page.dark .dt-row { border-bottom: 1rpx solid #2b2f36; }
+.page.dark .dt-label { color: #f0f2f5; }
+.page.dark .dt-d { background: #2b2f36; color: #d6d9de; }
+.page.dark .dt-type { color: #8b9098; }
+.page.dark .pt-row { border-bottom: 1rpx solid #2b2f36; }
+.page.dark .pt-row.alt { background: #1c1f24; }
+.page.dark .pt-head { background: #2a2418; border-bottom: 1rpx solid #3a3120; }
+.page.dark .pt-label { color: #f0f2f5; }
+.page.dark .c-six { color: #f0f2f5; }
+.page.dark .c-na { color: #d6d9de; }
+.page.dark .pt-line { color: #8b9098; border-left: 1rpx solid #2b2f36; }
+.page.dark .pt-info { border-left: 1rpx solid #2b2f36; }
+.page.dark .pt-foot { color: #8b9098; }
+.page.dark .hist-row { border-bottom: 1rpx solid #2b2f36; }
+.page.dark .hs-main { color: #e6e8eb; }
+.page.dark .hist-name { color: #f0f2f5; }
+.page.dark .hist-rule { color: #8b9098; }
+.page.dark .hist-time { color: #6b7077; }
+.page.dark .disclaimer { color: #6b7077; }

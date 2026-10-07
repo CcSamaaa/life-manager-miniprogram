@@ -1,0 +1,340 @@
+<view class="page">
+  <!-- 顶部标签 -->
+  <view class="tabs">
+    <view class="tab {{tab==='library'?'on':''}}" bindtap="switchTab" data-tab="library">动作库</view>
+    <view class="tab {{tab==='record'?'on':''}}" bindtap="switchTab" data-tab="record">记录</view>
+  </view>
+
+  <!-- 动作库 -->
+  <view wx:if="{{tab==='library'}}" class="pane">
+    <view class="search">
+      <input class="search-input" placeholder="搜索动作 / 肌群 / 器械" value="{{libKw}}" bindinput="onLibKw" />
+    </view>
+    <scroll-view scroll-x class="chips" enhanced show-scrollbar="{{false}}">
+      <view class="chip {{libGroup===''?'on':''}}" bindtap="onLibGroup" data-g="">全部</view>
+      <view class="chip {{libGroup===g?'on':''}}" wx:for="{{groups}}" wx:key="*this" bindtap="onLibGroup" data-g="{{g}}">{{g}}</view>
+    </scroll-view>
+    <view wx:if="{{libFiltered.length===0}}" class="empty">没有匹配的动作</view>
+    <view class="ex-card" wx:for="{{libFiltered}}" wx:key="id" style="border-left-color:{{groupColor[item.group]}}">
+      <view class="ex-top">
+        <text class="ex-name">{{item.name}}</text>
+        <text class="ex-group" style="color:{{groupColor[item.group]}}">{{item.group}}</text>
+      </view>
+      <view class="ex-equip">{{item.equip}}</view>
+      <view class="ex-tip">💡 {{item.tip}}</view>
+    </view>
+  </view>
+
+  <!-- 记录 -->
+  <view wx:if="{{tab==='record'}}" class="pane">
+    <!-- 子标签切换 -->
+    <view class="rec-tabs">
+      <view class="rec-tab {{recordView==='list'?'on':''}}" bindtap="switchRecordView" data-v="list">列表</view>
+      <view class="rec-tab {{recordView==='calendar'?'on':''}}" bindtap="switchRecordView" data-v="calendar">日历</view>
+    </view>
+
+    <!-- 列表视图 -->
+    <view wx:if="{{recordView==='list'}}">
+      <view class="section-title">个人纪录 PR</view>
+      <view wx:if="{{prs.length===0}}" class="empty">完成训练后，这里会显示你的最大重量</view>
+      <view class="pr-grid">
+        <view class="pr-card" wx:for="{{prs}}" wx:key="exId" style="border-left-color:{{groupColor[item.group]}}">
+          <view class="pr-name">{{item.exName}}</view>
+          <view class="pr-weight">{{item.weight}}<text class="pr-unit">kg</text></view>
+          <view class="pr-reps">{{item.reps}} 次</view>
+        </view>
+      </view>
+
+      <view class="section-title">训练历史</view>
+      <view wx:if="{{records.length===0}}" class="empty">还没有训练记录</view>
+      <view class="rec-card" wx:for="{{records}}" wx:key="_id">
+        <view class="rec-top">
+          <text class="rec-plan">{{item.title || item.planName}}</text>
+          <text class="rec-date">{{item.dateText}}</text>
+        </view>
+        <view wx:if="{{item.isCardio}}" class="rec-sub">有氧 · {{item.durationText}} · {{item.kcal}} kcal</view>
+        <view wx:else class="rec-sub">{{item.dayName}} · {{item.setCount}} 组 · {{item.volume}} kg</view>
+      </view>
+    </view>
+
+    <!-- 日历视图 -->
+    <view wx:if="{{recordView==='calendar'}}" class="cal-wrap">
+      <!-- 月份导航 -->
+      <view class="cal-head">
+        <view class="cal-arrow" bindtap="prevMonth">‹</view>
+        <view class="cal-title">{{calYear}}年{{calMonth+1}}月</view>
+        <view class="cal-arrow" bindtap="nextMonth">›</view>
+        <view class="cal-today-btn" bindtap="goToday">回到本月</view>
+      </view>
+
+      <!-- 月统计 -->
+      <view class="cal-stats">
+        <text>训练 {{calMonthStats.days}} 天</text>
+        <text>计划 {{calMonthStats.planned}} 天</text>
+        <text>容量 {{calMonthStats.totalVolume}} kg</text>
+      </view>
+
+      <!-- 星期头 -->
+      <view class="cal-weekdays">
+        <view class="cal-wd" wx:for="{{[1,2,3,4,5,6,0]}}" wx:key="*this">
+          {{item===0?'日':item===1?'一':item===2?'二':item===3?'三':item===4?'四':item===5?'五':'六'}}
+        </view>
+      </view>
+
+      <!-- 日历网格（支持滑动） -->
+      <view class="cal-grid" bindtouchstart="onTouchStart" bindtouchend="onTouchEnd">
+        <view class="cal-row" wx:for="{{calWeeks}}" wx:key="index" wx:for-index="ri">
+          <view class="cal-cell {{item.isCurrent?'':'other'}} {{item.mm===calToday?'today':''}} {{item.hasLog?'trained':''}} {{item.hasSchedule?'planned':''}}"
+                wx:for="{{item}}" wx:key="mm"
+                data-mm="{{item.mm}}" data-is-current="{{item.isCurrent}}" bindtap="tapDay">
+            <text class="cal-date-num">{{item.d}}</text>
+            <!-- 已完成：训练容量 -->
+            <view class="cal-vol" wx:if="{{item.hasLog && item.dayVol>0}}">{{item.dayVol}}</view>
+            <!-- 已安排未练：计划名 -->
+            <view class="cal-plan-tag" wx:if="{{item.hasSchedule}}">{{item.schDayName}}</view>
+            <!-- 动作名标签 -->
+            <view class="cal-tags" wx:if="{{item.dayExNames.length}}">
+              <text class="cal-tag" wx:for="{{item.dayExNames}}" wx:key="*this" wx:for-item="en">{{en}}</text>
+            </view>
+            <!-- 休息标记 -->
+            <view class="cal-rest-mark" wx:if="{{item.isCurrent && !item.hasLog && !item.hasSchedule}}">休息</view>
+          </view>
+        </view>
+      </view>
+
+      <view class="cal-legend">
+        <view class="lg"><view class="lg-dot done"></view>已练</view>
+        <view class="lg"><view class="lg-dot plan"></view>待练</view>
+        <view class="lg"><view class="lg-dot rest"></view>休息</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- ============ 日历日详情 / 安排面板 ============ -->
+  <view wx:if="{{calDay.show}}" class="sheet-mask" bindtap="closeCalDay">
+    <view class="sheet cal-day-sheet" catchtap="noop">
+      <view class="sheet-head">
+        <text class="sheet-title">{{calDay.date}}</text>
+        <text class="sheet-close" bindtap="closeCalDay">✕</text>
+      </view>
+
+      <scroll-view scroll-y class="sheet-body">
+        <!-- 当日安排：支持多条（力量计划 + 有氧） -->
+        <view class="cd-block">
+          <view class="cd-label">当日安排</view>
+          <view wx:if="{{calDay.schedules.length===0}}" class="cd-empty">还没有安排，点击下方按钮添加</view>
+          <view wx:for="{{calDay.schedules}}" wx:key="_id" class="cd-sch">
+            <view class="cd-sch-info">
+              <!-- 力量计划 -->
+              <block wx:if="{{item.type==='plan'||!item.type}}">
+                <text class="cd-sch-plan">{{item.planName}}</text>
+                <text class="cd-sch-day">{{item.dayName}}</text>
+              </block>
+              <!-- 有氧 -->
+              <block wx:else>
+                <text class="cd-sch-plan">{{item.name}}</text>
+                <text class="cd-sch-day">{{item.timeMin}} 分 · {{item.kcal}} kcal</text>
+              </block>
+            </view>
+            <view class="cd-sch-btns">
+              <view class="cd-btn ghost" data-id="{{item._id}}" bindtap="cancelSchedule">取消</view>
+              <view wx:if="{{item.type==='plan'||!item.type}}" class="cd-btn primary" data-planid="{{item.planId}}" data-day="{{item.dayIndex}}" bindtap="startScheduled">开始训练</view>
+              <view wx:else class="cd-btn primary" bindtap="openCardioPicker">再记</view>
+            </view>
+          </view>
+        </view>
+
+        <!-- 添加入口 -->
+        <view class="cd-block">
+          <view class="cd-add" bindtap="openPlanPicker">
+            <text class="cd-add-icon">＋</text>
+            <text>安排力量训练</text>
+          </view>
+          <view class="cd-add cd-add-cardio" bindtap="openCardioPicker">
+            <text class="cd-add-icon">🔥</text>
+            <text>添加有氧训练</text>
+          </view>
+        </view>
+
+        <!-- 训练记录 -->
+        <view wx:if="{{calDay.logs.length}}" class="cd-block">
+          <view class="cd-label">训练记录</view>
+          <view class="cd-log" wx:for="{{calDay.logs}}" wx:key="_id">
+            <view class="cdi-head">
+              <text class="cdi-plan">{{item.title || item.planName}}</text>
+              <text wx:if="{{item.dayName}}" class="cdi-day">{{item.dayName}}</text>
+            </view>
+            <view class="cdi-row" wx:if="{{item.volume>0}}">
+              <text class="cdi-label">容量</text>
+              <text class="cdi-val">{{item.volume}} kg</text>
+            </view>
+            <view class="cdi-row" wx:if="{{item.duration}}">
+              <text class="cdi-label">时长</text>
+              <text class="cdi-val">{{item.durationText || item.duration + ' 秒'}}</text>
+            </view>
+            <view class="cdi-row" wx:if="{{item.kcal>0}}">
+              <text class="cdi-label">消耗</text>
+              <text class="cdi-val">{{item.kcal}} kcal</text>
+            </view>
+            <view class="cdi-tags">
+              <text class="cdi-tag" wx:for="{{item.exNames}}" wx:key="*this" wx:for-item="en">{{en}}</text>
+            </view>
+          </view>
+        </view>
+
+        <!-- 新建模板入口 -->
+        <view class="cd-template-entry" bindtap="openEditor">
+          <text>🛠 新建训练模板（DIY）</text>
+        </view>
+      </scroll-view>
+    </view>
+  </view>
+
+  <!-- ============ 计划选择弹窗 ============ -->
+  <view wx:if="{{planPicker.show}}" class="sheet-mask" bindtap="closePlanPicker">
+    <view class="sheet picker" catchtap="noop">
+      <view class="sheet-head">
+        <text class="sheet-title">选择训练计划</text>
+        <text class="sheet-close" bindtap="closePlanPicker">✕</text>
+      </view>
+
+      <!-- 选计划 -->
+      <scroll-view scroll-y class="sheet-body" wx:if="{{!planPicker.showDays}}">
+        <view class="pick-plan" wx:for="{{planPicker.list}}" wx:key="name" data-idx="{{index}}" bindtap="pickPlan">
+          <view class="pp-info">
+            <text class="pp-name">{{item.name}}</text>
+            <text class="pp-meta">{{item.dayCount}} 天 · {{item.exCount}} 个动作{{item.source==='preset'?' · 预设':''}}</text>
+          </view>
+          <text class="pp-del" data-idx="{{index}}" catchtap="deleteEntry">删</text>
+        </view>
+        <view wx:if="{{planPicker.list.length===0}}" class="empty">还没有模板，点下方新建一个</view>
+      </scroll-view>
+
+      <!-- 选训练日 -->
+      <scroll-view scroll-y class="sheet-body" wx:if="{{planPicker.showDays}}">
+        <view class="pp-day-tip">「{{planPicker.selPlan.name}}」包含多个训练日，选择今天练哪个：</view>
+        <view class="pp-day" wx:for="{{planPicker.selPlan.days}}" wx:key="name" wx:for-index="di" data-day="{{di}}" bindtap="pickPlanDay">
+          <text class="pp-day-name">{{item.name}}</text>
+          <text class="pp-day-meta">{{item.exercises.length}} 个动作</text>
+        </view>
+      </scroll-view>
+
+      <view class="sheet-foot">
+        <view class="btn-cancel" bindtap="closePlanPicker">取消</view>
+        <view class="btn-save" bindtap="openEditor">＋ 新建模板</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- ============ DIY 模板编辑器 ============ -->
+  <view wx:if="{{editor.show}}" class="sheet-mask" bindtap="closeEditor">
+    <view class="sheet" catchtap="noop">
+      <view class="sheet-head">
+        <text class="sheet-title">新建训练模板</text>
+        <text class="sheet-close" bindtap="closeEditor">✕</text>
+      </view>
+      <view class="field">
+        <text class="field-label">模板名称</text>
+        <input class="field-input" value="{{editor.name}}" bindinput="onPlanName" placeholder="如：增肌计划" />
+      </view>
+      <scroll-view scroll-y class="sheet-body">
+        <view wx:if="{{!editor.exercises.length}}" class="empty">点击「添加动作」开始创建你的模板</view>
+        <view class="ex-edit" wx:for="{{editor.exercises}}" wx:for-item="ex" wx:for-index="ei" wx:key="exId">
+          <view class="ex-edit-head">
+            <text class="ex-edit-name">{{ex.exName}}</text>
+            <text class="ex-edit-remove" data-i="{{ei}}" bindtap="removeExercise">删除</text>
+          </view>
+          <view class="ex-edit-fields">
+            <text class="mini-label">目标次数</text>
+            <input class="mini-input" value="{{ex.reps}}" data-i="{{ei}}" data-field="reps" bindinput="onExField" placeholder="次" />
+            <text class="mini-label">组间休息</text>
+            <input class="mini-input" type="number" value="{{ex.rest}}" data-i="{{ei}}" data-field="rest" bindinput="onExField" placeholder="秒" />
+            <text class="mini-label">s</text>
+          </view>
+          <!-- 组列表 -->
+          <view class="set-edit-row" wx:for="{{ex.sets}}" wx:for-item="s" wx:for-index="si" wx:key="si">
+            <text class="set-edit-idx">第{{si+1}}组</text>
+            <input class="mini-input" type="digit" value="{{s.weight}}" data-i="{{ei}}" data-si="{{si}}" data-field="weight" bindinput="onSetField" placeholder="重量" />
+            <text class="mini-label">kg</text>
+            <input class="mini-input" value="{{s.reps}}" data-i="{{ei}}" data-si="{{si}}" data-field="reps" bindinput="onSetField" placeholder="次数" />
+            <text class="mini-label">次</text>
+            <text class="set-edit-remove" wx:if="{{ex.sets.length>1}}" data-i="{{ei}}" data-si="{{si}}" bindtap="removeSet">✕</text>
+          </view>
+          <view class="add-set-row" data-i="{{ei}}" bindtap="addSet">+ 新加一组</view>
+        </view>
+        <view class="ex-add" bindtap="openExPicker">+ 添加动作</view>
+      </scroll-view>
+      <view class="sheet-foot">
+        <view class="btn-cancel" bindtap="closeEditor">取消</view>
+        <view class="btn-save" bindtap="saveTemplate">保存模板</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- ============ 有氧添加 / 记录弹窗 ============ -->
+  <view wx:if="{{cardioPicker.show}}" class="sheet-mask" bindtap="closeCardioPicker">
+    <view class="sheet picker cardio-sheet" catchtap="noop">
+      <view class="sheet-head">
+        <text class="sheet-title">添加有氧训练</text>
+        <text class="sheet-close" bindtap="closeCardioPicker">✕</text>
+      </view>
+
+      <!-- 类型选择 -->
+      <scroll-view scroll-x class="cardio-types" enhanced show-scrollbar="{{false}}">
+        <view class="cardio-type {{cardioPicker.typeKey===item.key?'on':''}}" wx:for="{{cardioTypes}}" wx:key="key" data-key="{{item.key}}" bindtap="onCardioType">
+          <text class="ct-icon">{{item.icon}}</text>
+          <text class="ct-name">{{item.name}}</text>
+        </view>
+      </scroll-view>
+
+      <scroll-view scroll-y class="sheet-body">
+        <view class="cardio-form">
+          <view class="cf-row" wx:if="{{selectedCardio.hasSpeed}}">
+            <text class="cf-label">速度 <text class="cf-unit">({{selectedCardio.unit}})</text></text>
+            <input class="cf-input" type="digit" value="{{cardioPicker.speed}}" data-field="speed" bindinput="onCardioField" placeholder="如 10" />
+          </view>
+          <view class="cf-row" wx:if="{{selectedCardio.hasGrade}}">
+            <text class="cf-label">坡度 <text class="cf-unit">(%)</text></text>
+            <input class="cf-input" type="digit" value="{{cardioPicker.grade}}" data-field="grade" bindinput="onCardioField" placeholder="如 12" />
+          </view>
+          <view class="cf-row" wx:if="{{selectedCardio.hasTime}}">
+            <text class="cf-label">时长 <text class="cf-unit">(分)</text></text>
+            <input class="cf-input" type="digit" value="{{cardioPicker.timeMin}}" data-field="timeMin" bindinput="onCardioField" placeholder="如 30" />
+          </view>
+          <view class="cf-row" wx:if="{{selectedCardio.hasDistance}}">
+            <text class="cf-label">距离 <text class="cf-unit">(km)</text></text>
+            <input class="cf-input" type="digit" value="{{cardioPicker.distance}}" data-field="distance" bindinput="onCardioField" placeholder="可选" />
+          </view>
+        </view>
+
+        <view class="cardio-kcal">
+          <text class="ck-num">{{cardioPicker.kcal}}</text>
+          <text class="ck-unit">kcal</text>
+          <text class="ck-tip">体重 {{cardioPicker.weight}} kg 估算</text>
+        </view>
+      </scroll-view>
+
+      <view class="sheet-foot">
+        <view class="btn-cancel" bindtap="closeCardioPicker">取消</view>
+        <view class="btn-save" bindtap="saveCardio">保存记录</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 动作选择：点击后自动收起 -->
+  <view wx:if="{{exPicker.show}}" class="sheet-mask" bindtap="closeExPicker">
+    <view class="sheet picker" catchtap="noop">
+      <view class="sheet-head">
+        <text class="sheet-title">选择动作</text>
+        <text class="sheet-close" bindtap="closeExPicker">✕</text>
+      </view>
+      <view class="search"><input class="search-input" value="{{exPicker.kw}}" bindinput="onPickKw" placeholder="搜索动作" /></view>
+      <scroll-view scroll-y class="sheet-body">
+        <view class="pick-item" wx:for="{{exPicker.list}}" wx:key="id" data-exid="{{item.id}}" bindtap="addExercise">
+          <text class="pick-name">{{item.name}}</text>
+          <text class="pick-group">{{item.group}} · {{item.equip}}</text>
+        </view>
+      </scroll-view>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,210 @@
+.page {
+  min-height: 100vh;
+  padding: 24rpx 24rpx 60rpx;
+  background: #f5f6f8;
+}
+
+/* 状态卡 */
+.status-card {
+  border-radius: 24rpx;
+  padding: 40rpx 36rpx;
+  color: #fff;
+  background: linear-gradient(135deg, #ff8fa3, #ff6b81);
+}
+.status-card.fertile { background: linear-gradient(135deg, #ffb86b, #ff9a4d); }
+.status-card.normal { background: linear-gradient(135deg, #7aa0ff, #5b8dff); }
+.status-card.soon { background: linear-gradient(135deg, #ff7a8a, #e6536b); }
+.status-card.none { background: linear-gradient(135deg, #b0b6bd, #8d949c); }
+.sc-title { font-size: 26rpx; opacity: .9; }
+.sc-status { font-size: 46rpx; font-weight: 800; margin-top: 14rpx; }
+.sc-meta { font-size: 23rpx; opacity: .9; margin-top: 14rpx; }
+
+/* 操作按钮 */
+.actions { margin-top: 24rpx; }
+.btn {
+  border-radius: 44rpx;
+  font-size: 31rpx;
+  margin-bottom: 16rpx;
+}
+.btn.primary { background: #ff6b81; color: #fff; }
+.btn.end { background: #fff; color: #ff6b81; border: 2rpx solid #ff6b81; }
+.btn::after { border: none; }
+.btn-text {
+  text-align: center;
+  color: #5b8dff;
+  font-size: 27rpx;
+  padding: 18rpx 0;
+}
+
+/* 日历 */
+.cal-card {
+  margin-top: 28rpx;
+  background: #fff;
+  border-radius: 24rpx;
+  padding: 24rpx;
+}
+.cal-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8rpx 12rpx 20rpx;
+}
+.cal-month { font-size: 31rpx; font-weight: 700; color: #333; }
+.nav { font-size: 44rpx; color: #999; width: 60rpx; text-align: center; }
+.cal-week { display: flex; }
+.wk {
+  flex: 1;
+  text-align: center;
+  font-size: 24rpx;
+  color: #b0b3b8;
+  padding: 10rpx 0;
+}
+.cal-grid { display: flex; flex-direction: column; }
+.cal-week-row { display: flex; }
+.cal-cell {
+  flex: 1;
+  height: 78rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 27rpx;
+  color: #333;
+  position: relative;
+}
+.cal-cell.other { color: #d0d3d8; }
+.cal-cell.today { font-weight: 800; }
+.cal-cell.today::after {
+  content: '';
+  position: absolute;
+  bottom: 6rpx;
+  width: 10rpx;
+  height: 10rpx;
+  border-radius: 50%;
+  background: #ff6b81;
+}
+/* 状态着色 */
+.cal-cell.period {
+  background: #ff6b81;
+  color: #fff;
+  border-radius: 12rpx;
+}
+.cal-cell.predicted {
+  color: #ff6b81;
+  border: 2rpx solid #ffc2cc;
+  border-radius: 12rpx;
+}
+.cal-cell.fertile {
+  background: #ffe2c2;
+  color: #d9802a;
+  border-radius: 12rpx;
+}
+
+/* 图例 */
+.cal-legend {
+  display: flex;
+  justify-content: center;
+  gap: 28rpx;
+  margin-top: 18rpx;
+}
+.lg { font-size: 22rpx; color: #888; position: relative; padding-left: 26rpx; }
+.lg::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 50%;
+  transform: translateY(-50%);
+  width: 18rpx; height: 18rpx;
+  border-radius: 5rpx;
+}
+.lg.period::before { background: #ff6b81; }
+.lg.predicted::before { background: #fff; border: 2rpx solid #ffc2cc; }
+.lg.fertile::before { background: #ffe2c2; }
+
+/* 历史 */
+.hist-card {
+  margin-top: 28rpx;
+  background: #fff;
+  border-radius: 24rpx;
+  padding: 24rpx;
+}
+.hist-title { font-size: 29rpx; font-weight: 700; color: #333; margin-bottom: 12rpx; }
+.empty { font-size: 25rpx; color: #b0b3b8; padding: 30rpx 0; text-align: center; }
+.hist-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24rpx 0;
+  border-bottom: 1rpx solid #f2f3f5;
+}
+.hist-item:last-child { border-bottom: none; }
+.hist-date { font-size: 28rpx; color: #333; }
+.hist-sub { font-size: 23rpx; color: #999; margin-top: 8rpx; }
+.hist-sub .dot { margin-left: 8rpx; }
+.hist-sub .ongoing { color: #ff6b81; }
+.hist-del { font-size: 25rpx; color: #e64340; padding-left: 20rpx; }
+
+/* 弹窗 */
+.mask {
+  position: fixed;
+  left: 0; top: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,.45);
+  display: flex;
+  align-items: flex-end;
+  z-index: 100;
+}
+.sheet {
+  width: 100%;
+  background: #fff;
+  border-radius: 28rpx 28rpx 0 0;
+  padding: 36rpx 36rpx 48rpx;
+  box-sizing: border-box;
+}
+.sheet-title { font-size: 32rpx; font-weight: 700; color: #333; text-align: center; margin-bottom: 24rpx; }
+.sheet-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20rpx 0;
+  border-bottom: 1rpx solid #f2f3f5;
+}
+.sl { font-size: 28rpx; color: #555; }
+.si {
+  text-align: right;
+  font-size: 28rpx;
+  color: #1f1f1f;
+  flex: 1;
+  margin-left: 24rpx;
+}
+.sheet-btns { display: flex; gap: 24rpx; margin-top: 32rpx; }
+.sb {
+  flex: 1;
+  border-radius: 44rpx;
+  font-size: 30rpx;
+}
+.sb.cancel { background: #f2f3f5; color: #666; }
+.sb.ok { background: #ff6b81; color: #fff; }
+.sb::after { border: none; }
+
+/* ===== 深色模式 ===== */
+.page.dark { background: #15171a; }
+.page.dark .btn.end { background: #23262b; color: #ff8fa3; border-color: #ff8fa3; }
+.page.dark .btn-text { color: #8aa6ff; }
+.page.dark .cal-card,
+.page.dark .hist-card { background: #23262b; }
+.page.dark .cal-month { color: #f0f2f5; }
+.page.dark .nav { color: #6b7077; }
+.page.dark .cal-cell { color: #d6d9de; }
+.page.dark .cal-cell.other { color: #6b7077; }
+.page.dark .cal-cell.predicted { color: #ff9bb0; border-color: #6b3a44; }
+.page.dark .cal-cell.fertile { background: #3a2e1c; color: #e0a44a; }
+.page.dark .lg { color: #8b9098; }
+.page.dark .hist-title { color: #f0f2f5; }
+.page.dark .hist-item { border-bottom: 1rpx solid #2b2f36; }
+.page.dark .hist-date { color: #d6d9de; }
+.page.dark .hist-sub { color: #8b9098; }
+.page.dark .empty { color: #8b9098; }
+.page.dark .sheet { background: #23262b; }
+.page.dark .sheet-title { color: #f0f2f5; }
+.page.dark .sheet-row { border-bottom: 1rpx solid #2b2f36; }
+.page.dark .sl { color: #c8ccd2; }
+.page.dark .si { color: #f0f2f5; }
+.page.dark .sb.cancel { background: #2b2f36; color: #c8ccd2; }

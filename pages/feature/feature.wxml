@@ -1,0 +1,55 @@
+<view class="page {{theme}}">
+  <view class="hero">
+    <view class="hero-title">功能</view>
+    <view class="hero-row">
+      <text class="hero-sub">选择一个工具开始</text>
+      <text class="sort-btn" bindtap="toggleEdit">{{editing ? '完成' : '管理'}}</text>
+    </view>
+  </view>
+
+  <scroll-view class="scroll" scroll-y="{{!lockScroll}}" enhanced show-scrollbar="{{false}}">
+    <!-- 可见功能：管理态下可长按拖动排序 -->
+    <view class="grid {{absLayout ? 'grid-abs' : ''}}" style="{{absLayout ? ('height:' + gridHeight + 'px') : ''}}">
+      <view
+        wx:for="{{visibleList}}"
+        wx:key="key"
+        class="cell {{editing ? 'editing' : ''}} {{dragKey === item.key ? 'cell-dragging' : ''}}"
+        style="{{absLayout ? ('transform: translate3d(' + item.tx + 'px,' + item.ty + 'px,0) scale(' + item.scale + ')') : ''}}"
+        bindtap="go"
+        bindtouchstart="onHandleStart"
+        bindtouchmove="onDragMove"
+        bindtouchend="onDragEnd"
+        data-key="{{item.key}}"
+        data-path="{{item.path}}"
+        data-miniapp="{{item.miniapp}}"
+      >
+        <view class="cell-icon">{{item.icon}}</view>
+        <view class="cell-name">{{item.name}}</view>
+        <view class="cell-desc">{{item.desc}}</view>
+
+        <view wx:if="{{editing}}" class="cell-actions">
+          <text class="hide-btn" catchtap="toggleHidden" data-key="{{item.key}}">隐藏</text>
+        </view>
+        <view wx:if="{{adjusting && dragKey === item.key}}" class="adjust-hint">拖动排序</view>
+      </view>
+    </view>
+
+    <!-- 已隐藏功能：底部单开区域，不参与排序 -->
+    <view wx:if="{{editing && hiddenList.length > 0}}" class="hidden-section">
+      <view class="hidden-title">已隐藏（不参与排序）</view>
+      <view class="hidden-grid">
+        <view
+          wx:for="{{hiddenList}}"
+          wx:key="key"
+          class="cell cell-hidden"
+        >
+          <view class="cell-icon">{{item.icon}}</view>
+          <view class="cell-name">{{item.name}}</view>
+          <view class="cell-actions">
+            <text class="hide-btn" catchtap="toggleHidden" data-key="{{item.key}}">显示</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </scroll-view>
+</view>

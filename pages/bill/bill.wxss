@@ -1,0 +1,246 @@
+.page {
+  min-height: 100vh;
+  padding: 20rpx 0 140rpx;
+}
+
+/* 汇总卡片 */
+.summary {
+  text-align: center;
+}
+.month {
+  font-size: 26rpx;
+  color: #9aa0a6;
+}
+.balance {
+  margin: 10rpx 0 20rpx;
+}
+.b-num {
+  font-size: 60rpx;
+  font-weight: 700;
+  color: #1f1f1f;
+}
+.b-label {
+  font-size: 24rpx;
+  color: #9aa0a6;
+  margin-top: 4rpx;
+}
+.io {
+  display: flex;
+}
+.io-item {
+  flex: 1;
+}
+.io-num {
+  font-size: 32rpx;
+  font-weight: 600;
+}
+.io-num.out {
+  color: #e24b4a;
+}
+.io-num.in {
+  color: #07c160;
+}
+.io-label {
+  font-size: 22rpx;
+  color: #9aa0a6;
+  margin-top: 4rpx;
+}
+
+.loading,
+.empty {
+  margin-top: 120rpx;
+}
+.empty view {
+  line-height: 1.8;
+}
+.tip {
+  margin: 24rpx 0;
+}
+
+/* 流水分组 */
+.group {
+  margin: 24rpx 24rpx 0;
+}
+.group-head {
+  display: flex;
+  align-items: center;
+  margin: 10rpx 4rpx;
+}
+.g-date {
+  font-size: 26rpx;
+  font-weight: 600;
+  color: #1f1f1f;
+}
+.g-week {
+  font-size: 22rpx;
+  color: #9aa0a6;
+  margin-left: 12rpx;
+}
+
+.bill-row {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 22rpx 24rpx;
+  margin-bottom: 14rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.04);
+}
+.b-emoji {
+  font-size: 40rpx;
+  width: 60rpx;
+  text-align: center;
+}
+.b-info {
+  flex: 1;
+  margin-left: 18rpx;
+}
+.b-name {
+  font-size: 30rpx;
+  font-weight: 500;
+}
+.b-note {
+  font-size: 22rpx;
+  color: #9aa0a6;
+  margin-top: 4rpx;
+}
+.b-amount {
+  font-size: 32rpx;
+  font-weight: 700;
+}
+.b-amount.out {
+  color: #e24b4a;
+}
+.b-amount.in {
+  color: #07c160;
+}
+
+/* 悬浮加号 */
+.fab {
+  position: fixed;
+  right: 40rpx;
+  bottom: 60rpx;
+  width: 96rpx;
+  height: 96rpx;
+  border-radius: 50%;
+  background: #07c160;
+  color: #fff;
+  font-size: 60rpx;
+  line-height: 92rpx;
+  text-align: center;
+  box-shadow: 0 8rpx 20rpx rgba(7, 193, 96, 0.4);
+  z-index: 50;
+}
+
+/* 新增弹层 */
+.mask {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 100;
+  display: flex;
+  align-items: flex-end;
+}
+.sheet {
+  width: 100%;
+  background: #fff;
+  border-radius: 24rpx 24rpx 0 0;
+  padding: 32rpx 20rpx 48rpx;
+  box-sizing: border-box;
+}
+.sheet-title {
+  font-size: 34rpx;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 24rpx;
+}
+.seg {
+  display: flex;
+  background: #f0f1f3;
+  border-radius: 14rpx;
+  padding: 6rpx;
+  margin-bottom: 20rpx;
+}
+.seg-item {
+  flex: 1;
+  text-align: center;
+  padding: 16rpx 0;
+  font-size: 28rpx;
+  color: #9aa0a6;
+  border-radius: 12rpx;
+}
+.seg-item.on {
+  background: #fff;
+  color: #07c160;
+  font-weight: 600;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.08);
+}
+.cats {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 20rpx;
+}
+.cat {
+  width: 25%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 14rpx 0;
+  box-sizing: border-box;
+}
+.cat-emoji {
+  font-size: 44rpx;
+}
+.cat-name {
+  font-size: 22rpx;
+  color: #9aa0a6;
+  margin-top: 6rpx;
+}
+.cat.on .cat-name {
+  color: #07c160;
+  font-weight: 600;
+}
+.cat.on .cat-emoji {
+  transform: scale(1.15);
+}
+.amount-input,
+.note-input {
+  width: 100%;
+  box-sizing: border-box;
+  background: #f5f6f8;
+  border-radius: 14rpx;
+  padding: 24rpx 20rpx;
+  font-size: 30rpx;
+  margin-bottom: 24rpx;
+  overflow: visible;
+  line-height: 1.4;
+}
+.save-btn {
+  width: 100%;
+  border-radius: 14rpx;
+  margin-top: 8rpx;
+}
+
+/* ===== 深色模式 ===== */
+.page.dark { background: #15171a; }
+.page.dark .month,
+.page.dark .b-label,
+.page.dark .io-label { color: #8b9098; }
+.page.dark .b-num { color: #f0f2f5; }
+.page.dark .g-date { color: #f0f2f5; }
+.page.dark .g-week { color: #8b9098; }
+.page.dark .bill-row { background: #23262b; box-shadow: 0 2rpx 12rpx rgba(0,0,0,0.3); }
+.page.dark .b-name { color: #f0f2f5; }
+.page.dark .b-note { color: #8b9098; }
+.page.dark .sheet { background: #23262b; }
+.page.dark .sheet-title { color: #f0f2f5; }
+.page.dark .seg { background: #2b2f36; }
+.page.dark .seg-item { color: #8b9098; }
+.page.dark .seg-item.on { background: #15171a; color: #34d27e; }
+.page.dark .cat-name { color: #8b9098; }
+.page.dark .cat.on .cat-name { color: #34d27e; }
+.page.dark .amount-input,
+.page.dark .note-input { background: #2b2f36; color: #f0f2f5; }

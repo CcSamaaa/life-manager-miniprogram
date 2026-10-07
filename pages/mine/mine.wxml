@@ -1,0 +1,57 @@
+<view class="page {{theme}}">
+  <!-- 资料卡 -->
+  <view class="profile-card">
+    <view class="avatar" bindtap="chooseAvatar">
+      <image wx:if="{{avatarUrl}}" class="avatar-img" src="{{avatarUrl}}" mode="aspectFill" />
+      <text wx:else class="avatar-ph">👤</text>
+    </view>
+    <view class="pinfo">
+      <view class="pname" bindtap="editName">{{name || '点击设置昵称'}}</view>
+      <view class="phint">点击头像或昵称可编辑</view>
+    </view>
+  </view>
+
+  <!-- 身体数据表单 -->
+  <view class="form">
+    <view class="row" bindtap="chooseGender">
+      <text class="label">性别</text>
+      <text class="value">{{gender || '未设置'}} <text class="arrow">⌄</text></text>
+    </view>
+    <view class="row">
+      <text class="label">年龄</text>
+      <input class="value-input" type="number" value="{{age}}" placeholder="岁" bindinput="onAge" />
+    </view>
+    <view class="row">
+      <text class="label">身高</text>
+      <input class="value-input" type="digit" value="{{height}}" placeholder="cm" bindinput="onHeight" />
+    </view>
+    <view class="row">
+      <text class="label">体重</text>
+      <input class="value-input" type="digit" value="{{weight}}" placeholder="kg" bindinput="onWeight" />
+    </view>
+    <view class="row" bindtap="chooseActivity">
+      <text class="label">活动系数</text>
+      <text class="value">{{activityLabel}} <text class="arrow">⌄</text></text>
+    </view>
+  </view>
+
+  <!-- 活动系数说明 -->
+  <view class="act-hint">
+    <text>选择日常运动量，让每日总消耗（TDEE）更贴近真实：久坐(1.2) / 轻度(1.375) / 中度(1.55) / 高强度(1.725)</text>
+  </view>
+
+  <!-- 代谢概览 -->
+  <view wx:if="{{bmr}}" class="bmr-card">
+    <view class="bmr-item">
+      <text class="bk">基础代谢 (BMR)</text>
+      <text class="bv">{{bmr}} kcal/天</text>
+    </view>
+    <view class="bmr-item">
+      <text class="bk">每日总消耗 ({{activityLabel}})</text>
+      <text class="bv">{{tdee}} kcal/天</text>
+    </view>
+    <view class="bmr-tip">用于「今天 - 热量计算」估算每日收支</view>
+  </view>
+
+  <button class="save-btn" bindtap="save" loading="{{saving}}">保存资料</button>
+</view>

@@ -1,0 +1,192 @@
+<view class="page {{showResult ? 'dark' : theme}}">
+  <!-- 输入表单 -->
+  <view wx:if="{{!showResult}}" class="form card">
+    <view class="field">
+      <text class="label">出生日期</text>
+      <picker mode="date" value="{{date}}" bindchange="onDate" end="{{maxDate}}">
+        <view class="picker">{{date || '请选择出生日期'}}</view>
+      </picker>
+    </view>
+    <view class="field">
+      <text class="label">出生时间</text>
+      <picker mode="time" value="{{time}}" bindchange="onTime">
+        <view class="picker">{{time}}</view>
+      </picker>
+    </view>
+    <view class="field">
+      <text class="label">性别</text>
+      <radio-group bindchange="onGender" class="radio-row">
+        <label class="radio-item"><radio value="男" checked="{{gender === '男'}}" color="#07c160" />男</label>
+        <label class="radio-item"><radio value="女" checked="{{gender === '女'}}" color="#07c160" />女</label>
+      </radio-group>
+    </view>
+    <button class="btn-primary" bindtap="calc">排盘</button>
+    <button class="btn-ghost" bindtap="save">保存信息</button>
+  </view>
+
+  <!-- 专业排盘结果 -->
+  <view wx:else class="pro-result">
+    <!-- 顶部标题栏 -->
+    <view class="pro-header">
+      <view class="pro-title">Cc 八字排盘</view>
+      <view class="pro-sub">{{result.text}} · 日主{{result.dayMaster}} · {{result.zodiac}}</view>
+    </view>
+
+    <!-- Tab 栏 -->
+    <view class="tab-bar">
+      <view class="tab-item {{activeTab==='info'?'active':''}}" bindtap="switchTab" data-tab="info">基本信息</view>
+      <view class="tab-item {{activeTab==='chart'?'active':''}}" bindtap="switchTab" data-tab="chart">基本排盘</view>
+    </view>
+
+    <!-- 基本信息面板 -->
+    <view wx:if="{{activeTab === 'info'}}" class="panel info-panel">
+      <view class="info-grid">
+        <view class="info-cell">
+          <text class="info-label">八字</text>
+          <text class="info-val bz">{{result.text}}</text>
+        </view>
+        <view class="info-cell">
+          <text class="info-label">日主</text>
+          <text class="val-gan gan-{{result.dayMasterElemEn}}">{{result.dayMaster}}</text>
+        </view>
+        <view class="info-cell">
+          <text class="info-label">生肖</text>
+          <text class="info-val">{{result.zodiac}}</text>
+        </view>
+        <view class="info-cell">
+          <text class="info-label">性别</text>
+          <text class="info-val">{{result.gender}}</text>
+        </view>
+      </view>
+      <view class="elem-section">
+        <text class="section-label">五行统计</text>
+        <view class="elem-bars">
+          <view wx:for="{{result.elemList}}" wx:key="en" class="elem-bar-item">
+            <text class="elem-name chip-{{item.en}}">{{item.name}}</text>
+            <view class="bar-track"><view class="bar-fill bar-{{item.en}}" style="width: {{item.count * 20}}%"></view></view>
+            <text class="elem-count">{{item.count}}</text>
+          </view>
+        </view>
+      </view>
+      <view class="nayin-section">
+        <text class="section-label">纳音五行</text>
+        <view class="nayin-row">
+          <view wx:for="{{result.pillars}}" wx:key="label" class="nayin-cell">
+            <text class="nayin-label">{{item.label}}柱</text>
+            <text class="nayin-val">{{result.nayin[index]}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 基本排盘面板（核心表格）-->
+    <view wx:if="{{activeTab === 'chart'}}" class="panel chart-panel">
+      <view class="chart-table">
+        <!-- 列标题行 -->
+        <view class="ct-row ct-head">
+          <text class="ct-th ct-row-label">项目</text>
+          <text class="ct-th" wx:for="{{result.pillars}}" wx:key="label">{{item.label}}柱</text>
+        </view>
+
+        <!-- 主星（天干十神）-->
+        <view class="ct-row">
+          <text class="ct-td ct-row-label">主星</text>
+          <view class="ct-td" wx:for="{{result.mainGods}}" wx:key="*this" wx:for-item="god" wx:for-index="i">
+            <text class="god-text">{{god}}</text>
+          </view>
+        </view>
+
+        <!-- 天干 -->
+        <view class="ct-row ct-highlight">
+          <text class="ct-td ct-row-label">天干</text>
+          <view class="ct-td" wx:for="{{result.pillars}}" wx:key="label" wx:for-item="p" wx:for-index="i">
+            <text class="gan-big gan-{{p.ganElemEn}}">{{p.gan}}</text>
+            <text class="zhi-animal">{{zodiacAnimals[result.pillars[i].zhiIdx] || ''}}</text>
+          </view>
+        </view>
+
+        <!-- 地支 -->
+        <view class="ct-row ct-highlight">
+          <text class="ct-td ct-row-label">地支</text>
+          <view class="ct-td" wx:for="{{result.pillars}}" wx:key="label" wx:for-item="p" wx:for-index="i">
+            <text class="zhi-big zhi-{{p.zhiElemEn}}">{{p.zhi}}</text>
+            <text class="zhi-animal">{{zodiacAnimals[p.zhiIdx] || ''}}</text>
+          </view>
+        </view>
+
+        <!-- 藏干 -->
+        <view class="ct-row">
+          <text class="ct-td ct-row-label">藏干</text>
+          <view class="ct-td hidden-cell" wx:for="{{result.hiddenData}}" wx:key="*this" wx:for-item="hd" wx:for-index="i">
+            <view wx:for="{{hd}}" wx:key="gan" wx:for-item="h" class="hidden-item">
+              <text class="hidden-gan gan-{{h.elemEn}}">{{h.gan}}</text>
+              <text class="hidden-elem chip-{{h.elemEn}}">{{h.elem}}</text>
+            </view>
+          </view>
+        </view>
+
+        <!-- 副星（藏干十神去重）-->
+        <view class="ct-row">
+          <text class="ct-td ct-row-label">副星</text>
+          <view class="ct-td sub-cell" wx:for="{{result.subStars}}" wx:key="*this" wx:for-item="subs">
+            <view wx:for="{{subs}}" wx:key="*this" wx:for-item="s">
+              <text class="sub-text">{{s}}</text>
+            </view>
+          </view>
+        </view>
+
+        <!-- 星运（十二长生）-->
+        <view class="ct-row">
+          <text class="ct-td ct-row-label">星运</text>
+          <view class="ct-td" wx:for="{{result.starFortune}}" wx:key="*this" wx:for-item="sf">
+            <text class="life-text life-{{sf.en}}">{{sf.name}}</text>
+          </view>
+        </view>
+
+        <!-- 自坐 -->
+        <view class="ct-row">
+          <text class="ct-td ct-row-label">自坐</text>
+          <text class="ct-td"></text>
+          <text class="ct-td"></text>
+          <view class="ct-td">
+            <text class="life-text life-{{result.selfSitEn}}">{{result.selfSit}}</text>
+          </view>
+        </view>
+
+        <!-- 空亡 -->
+        <view class="ct-row">
+          <text class="ct-td ct-row-label">空亡</text>
+          <view class="ct-td" wx:for="{{result.pillars}}" wx:key="label" wx:for-item="p" wx:for-index="i">
+            <text wx:if="{{result.isVoid[i]}}" class="void-text">空亡</text>
+            <text wx:else class="muted-text">-</text>
+          </view>
+        </view>
+
+        <!-- 纳音 -->
+        <view class="ct-row">
+          <text class="ct-td ct-row-label">纳音</text>
+          <view class="ct-td" wx:for="{{result.nayin}}" wx:key="*this" wx:for-item="ny">
+            <text class="nayin-text">{{ny}}</text>
+          </view>
+        </view>
+
+        <!-- 神煞 -->
+        <view class="ct-row ct-sha-row">
+          <text class="ct-td ct-row-label">神煞</text>
+          <view class="ct-td sha-cell" wx:for="{{result.shaByPos}}" wx:key="*this" wx:for-item="shaList" wx:for-index="i">
+            <view wx:for="{{shaList}}" wx:key="name" wx:for-item="s">
+              <text class="sha-text">{{s.name}}</text>
+            </view>
+            <text wx:if="{{shaList.length === 0}}" class="muted-text">-</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 底部操作 -->
+    <view class="pro-footer">
+      <view class="disclaimer muted">※ 八字排盘仅供娱乐参考，不代表任何科学或命运论断。</view>
+      <button class="btn-edit" bindtap="edit">修改信息</button>
+    </view>
+  </view>
+</view>

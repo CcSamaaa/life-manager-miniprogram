@@ -1,0 +1,53 @@
+<view class="page {{theme}}">
+  <view class="hero">
+    <view class="hero-title">AI 食物热量</view>
+    <view class="hero-sub">拍照识别食物 · 自动估算热量</view>
+  </view>
+
+  <!-- 拍照 / 选择 -->
+  <view class="capture" bindtap="chooseImage">
+    <view wx:if="{{!preview}}" class="capture-empty">
+      <view class="cap-ico">📷</view>
+      <view class="cap-text">点击拍照或选择食物图片</view>
+      <view class="cap-hint">AI 将识别食物并估算热量</view>
+    </view>
+    <image wx:else class="capture-img" src="{{preview}}" mode="aspectFill" catchtap="chooseImage" />
+  </view>
+
+  <!-- 识别中 -->
+  <view wx:if="{{loading}}" class="loading">
+    <view class="spinner"></view>
+    <text class="loading-text">AI 正在识别中…</text>
+  </view>
+
+  <!-- 识别结果 -->
+  <view wx:if="{{result}}" class="result-card">
+    <view wx:if="{{result.mock}}" class="mock-tip">演示数据（未配置 AI 密钥，请在云函数环境变量中设置 AI_API_KEY）</view>
+    <view class="res-title">识别结果</view>
+    <view class="food-row" wx:for="{{result.foods}}" wx:key="name">
+      <view class="food-name">{{index + 1}}. {{item.name}}</view>
+      <view class="food-meta">{{item.weight}}g · {{item.calories}} kcal</view>
+    </view>
+    <view class="total-row">
+      <text class="total-label">总计</text>
+      <text class="total-num">{{result.total}} kcal</text>
+    </view>
+    <view class="res-actions">
+      <button class="btn-ghost" bindtap="discard">重拍</button>
+      <button class="btn-primary" loading="{{saving}}" bindtap="saveResult">保存记录</button>
+    </view>
+  </view>
+
+  <!-- 历史 -->
+  <view class="section-title">历史记录</view>
+  <view wx:if="{{logs.length === 0}}" class="empty">还没有识别记录</view>
+  <view class="log-card" wx:for="{{logs}}" wx:key="_id">
+    <image wx:if="{{item.img}}" class="log-img" src="{{item.img}}" mode="aspectFill" data-url="{{item.img}}" bindtap="viewImage" />
+    <view class="log-body">
+      <view class="log-date">{{item.dateText}}</view>
+      <view class="log-foods">{{item.foodNames}}</view>
+    </view>
+    <view class="log-total">{{item.total}}<text class="log-unit">kcal</text></view>
+    <view class="log-del" data-id="{{item._id}}" catchtap="delLog">✕</view>
+  </view>
+</view>

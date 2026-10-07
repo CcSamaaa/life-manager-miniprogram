@@ -1,0 +1,53 @@
+.habit-item {
+  display: flex;
+  align-items: center;
+  background: #ffffff;
+  border-radius: 16rpx;
+  padding: 24rpx;
+  margin: 16rpx 24rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.04);
+}
+
+.habit-item.actionable {
+  cursor: pointer;
+}
+
+.emoji {
+  font-size: 48rpx;
+  width: 72rpx;
+  text-align: center;
+}
+
+.info {
+  flex: 1;
+  margin-left: 20rpx;
+}
+
+.name {
+  font-size: 30rpx;
+  font-weight: 500;
+  color: #1f1f1f;
+}
+
+.sub {
+  margin-top: 6rpx;
+  font-size: 24rpx;
+  color: #9aa0a6;
+}
+
+.badge {
+  min-width: 56rpx;
+  height: 56rpx;
+  line-height: 56rpx;
+  text-align: center;
+  border-radius: 28rpx;
+  background: #f0f1f3;
+  color: #9aa0a6;
+  font-size: 28rpx;
+  font-weight: 600;
+}
+
+.badge.done {
+  background: #07c160;
+  color: #ffffff;
+}

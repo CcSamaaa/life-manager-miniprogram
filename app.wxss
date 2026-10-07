@@ -1,0 +1,49 @@
+page {
+  background: #f5f6f8;
+  font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "PingFang SC", sans-serif;
+  color: #1f1f1f;
+}
+
+.card {
+  background: #ffffff;
+  border-radius: 16rpx;
+  padding: 24rpx;
+  margin: 20rpx 24rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.04);
+}
+
+.btn-primary {
+  background: #07c160;
+  color: #fff;
+}
+
+.btn-primary[disabled] {
+  background: #9be3b9;
+}
+
+.muted {
+  color: #9aa0a6;
+  font-size: 24rpx;
+}
+
+.center {
+  text-align: center;
+}
+
+/* ===== 深色模式（全局基础）=====
+   仅作用于带 .page.dark 根类的页面，不影响本身为深色设计的活动/塔罗/每日一签等页。 */
+.page.dark {
+  background: #15171a;
+  color: #e6e8eb;
+}
+.page.dark .card {
+  background: #23262b;
+  box-shadow: 0 2rpx 12rpx rgba(0,0,0,0.35);
+}
+.page.dark .muted { color: #8b9098; }
+.page.dark input,
+.page.dark textarea,
+.page.dark .value-input {
+  color: #f0f2f5;
+}
+.page.dark .btn-primary { background: #1f8a4c; }

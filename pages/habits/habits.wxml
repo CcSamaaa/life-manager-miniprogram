@@ -1,0 +1,67 @@
+<view class="page {{theme}}">
+  <view wx:if="{{habits.length === 0}}" class="muted center empty">还没有习惯，点下方按钮添加第一个 ✨</view>
+
+  <view
+    wx:for="{{habits}}"
+    wx:key="_id"
+    class="habit-row"
+    bindtap="openEdit"
+    data-id="{{item._id}}"
+  >
+    <view class="emoji">{{item.emoji}}</view>
+    <view class="info">
+      <view class="name">{{item.name}}</view>
+      <view class="sub">
+        <text wx:if="{{item.targetType === 'daily'}}">每天一次</text>
+        <text wx:else>每周 {{item.targetCount}} 次</text>
+      </view>
+    </view>
+    <view class="del" catchtap="remove" data-id="{{item._id}}">删除</view>
+  </view>
+
+  <button class="add-btn" bindtap="openAdd">+ 添加习惯</button>
+</view>
+
+<!-- 新增 / 编辑 表单 -->
+<view wx:if="{{showForm}}" class="mask" bindtap="closeForm">
+  <view class="sheet" catchtap="noop">
+    <view class="sheet-title">{{editId ? '编辑习惯' : '添加习惯'}}</view>
+
+    <view class="field">
+      <text class="label">名称</text>
+      <input class="input" placeholder="如：喝水 2000ml" value="{{form.name}}" bindinput="onNameInput" />
+    </view>
+
+    <view class="field">
+      <text class="label">图标</text>
+      <scroll-view class="emoji-grid" scroll-y>
+        <view
+          wx:for="{{emojis}}"
+          wx:key="*this"
+          class="emoji-cell {{form.emoji === item ? 'active' : ''}}"
+          bindtap="pickEmoji"
+          data-e="{{item}}"
+        >{{item}}</view>
+      </scroll-view>
+    </view>
+
+    <view class="field">
+      <text class="label">频率</text>
+      <view class="seg">
+        <view class="seg-item {{form.targetType === 'daily' ? 'on' : ''}}" bindtap="setType" data-t="daily">每天</view>
+        <view class="seg-item {{form.targetType === 'weekly' ? 'on' : ''}}" bindtap="setType" data-t="weekly">每周</view>
+      </view>
+    </view>
+
+    <view class="field" wx:if="{{form.targetType === 'weekly'}}">
+      <text class="label">每周次数</text>
+      <view class="stepper">
+        <view class="step-btn" bindtap="stepCount" data-d="-1">−</view>
+        <view class="step-val">{{form.targetCount}}</view>
+        <view class="step-btn" bindtap="stepCount" data-d="1">＋</view>
+      </view>
+    </view>
+
+    <button class="save-btn" bindtap="save">保存</button>
+  </view>
+</view>

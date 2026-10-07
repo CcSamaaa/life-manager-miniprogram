@@ -1,0 +1,162 @@
+<view class="page {{theme}}">
+
+  <!-- 头部 -->
+  <view class="hero">
+    <view class="hero-title">六爻占卜</view>
+    <view class="hero-sub">三枚骰子 · 六爻成卦 · 纳甲断卦</view>
+  </view>
+
+  <!-- 投卦控制区 -->
+  <view class="cast-card">
+    <view class="dice-row">
+      <view class="dice {{casting ? 'rolling' : ''}}" wx:for="{{dice}}" wx:key="index">
+        <text class="dice-num">{{item}}</text>
+      </view>
+    </view>
+    <view class="cast-tip" wx:if="{{!casting && !result}}">点击下方按钮，投出三枚骰子起一卦</view>
+    <view class="cast-tip" wx:if="{{casting}}">爻象转动中……</view>
+    <button class="btn-cast" bindtap="throw" disabled="{{casting}}">
+      {{result ? '🎲 再投一次' : '🎲 投卦'}}
+    </button>
+  </view>
+
+  <!-- 结果区 -->
+  <block wx:if="{{result}}">
+
+    <!-- 本卦 -->
+    <view class="g-card">
+      <view class="g-head">
+        <view class="g-tag">本卦</view>
+        <view class="g-name">{{result.primary.name}}</view>
+        <view class="g-meta">{{result.primary.up}}上{{result.primary.lo}}下 · {{result.primary.gong}}宫属{{result.primary.gongElem}}</view>
+      </view>
+      <view class="plain-box" wx:if="{{result.primaryPlain}}">{{result.primaryPlain}}</view>
+      <view class="g-trigram">
+        <text class="tg">{{result.primary.upSym}}</text>
+        <text class="tg-sub">上卦{{result.primary.up}}</text>
+        <text class="tg">{{result.primary.loSym}}</text>
+        <text class="tg-sub">下卦{{result.primary.lo}}</text>
+      </view>
+      <view class="yao-list">
+        <view class="yao-row" wx:for="{{ben}}" wx:key="index">
+          <view class="yao {{item.yang ? 'yang' : 'yin'}} {{item.value === 9 ? 'laoyang' : ''}} {{item.value === 6 ? 'laoyin' : ''}}">
+            <block wx:if="{{item.yang}}"><view class="yao-line"></view></block>
+            <block wx:else><view class="yao-line half left"></view><view class="yao-line half right"></view></block>
+          </view>
+          <view class="yao-side">
+            <text class="yao-label">{{item.label}}</text>
+            <text class="yao-type {{item.value === 9 || item.value === 6 ? 'chg' : ''}}">{{item.type}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 变卦 -->
+    <view class="g-card" wx:if="{{result.hasChanged}}">
+      <view class="g-head">
+        <view class="g-tag bian">变卦</view>
+        <view class="g-name">{{result.changed.name}}</view>
+        <view class="g-meta">{{result.changed.up}}上{{result.changed.lo}}下 · {{result.changed.gong}}宫属{{result.changed.gongElem}}</view>
+      </view>
+      <view class="plain-box alt" wx:if="{{result.changedPlain}}">{{result.changedPlain}}</view>
+      <view class="g-trigram">
+        <text class="tg">{{result.changed.upSym}}</text>
+        <text class="tg-sub">上卦{{result.changed.up}}</text>
+        <text class="tg">{{result.changed.loSym}}</text>
+        <text class="tg-sub">下卦{{result.changed.lo}}</text>
+      </view>
+      <view class="yao-list">
+        <view class="yao-row" wx:for="{{bian}}" wx:key="index">
+          <view class="yao {{item.yang ? 'yang' : 'yin'}} {{item.changing ? 'changing' : ''}}">
+            <block wx:if="{{item.yang}}"><view class="yao-line"></view></block>
+            <block wx:else><view class="yao-line half left"></view><view class="yao-line half right"></view></block>
+          </view>
+          <view class="yao-side">
+            <text class="yao-label">{{item.label}}</text>
+            <text class="yao-type chg" wx:if="{{item.changing}}">变</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 断卦 -->
+    <view class="g-card">
+      <view class="sec-title">断卦</view>
+      <view class="rule-box">
+        <text class="rule-label">朱熹《启蒙》断法</text>
+        <text class="rule-text">{{result.interp.rule}}</text>
+      </view>
+      <view class="jue-row" wx:for="{{result.interp.texts}}" wx:key="index">
+        <view class="jue-title {{item.primary ? 'main' : ''}}">{{item.title}}</view>
+        <view class="jue-text">{{item.text}}</view>
+        <view class="jue-plain" wx:if="{{item.plain}}">💡 {{item.plain}}</view>
+      </view>
+      <view class="image-line">《象》{{result.primary.image}}</view>
+    </view>
+
+    <!-- 投掷明细 -->
+    <view class="g-card">
+      <view class="sec-title link" bindtap="toggleDetail">
+        投掷明细 <text class="arrow">{{showDetail ? '收起 ▲' : '展开 ▼'}}</text>
+      </view>
+      <view wx:if="{{showDetail}}">
+        <view class="dt-row" wx:for="{{result.rows}}" wx:key="index">
+          <text class="dt-label">{{item.label}}</text>
+          <view class="dt-dice">
+            <text class="dt-d" wx:for="{{item.dice}}" wx:for-item="d" wx:key="index">{{d}}</text>
+          </view>
+          <text class="dt-type {{item.changing ? 'chg' : ''}}">{{item.type}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 专业排盘 -->
+    <view class="g-card">
+      <view class="sec-title">六爻排盘</view>
+      <view class="pt-row pt-head">
+        <view class="pt-yao">爻位</view>
+        <view class="pt-info">
+          <text class="c-god">六神</text>
+          <text class="c-six">六亲</text>
+          <text class="c-na">纳甲</text>
+        </view>
+        <view class="pt-line">爻辞</view>
+      </view>
+      <view class="pt-row {{index % 2 === 0 ? 'alt' : ''}}" wx:for="{{table}}" wx:key="index">
+        <view class="pt-yao">
+          <text class="pt-label">{{item.label}}</text>
+          <text class="pt-role {{item.roleClass}}" wx:if="{{item.role}}">{{item.role}}</text>
+        </view>
+        <view class="pt-info">
+          <text class="c-god">{{item.god}}</text>
+          <text class="c-six">{{item.six}}</text>
+          <text class="c-na {{item.naElemEn}}">{{item.na}}</text>
+        </view>
+        <view class="pt-line">{{item.lineText}}</view>
+      </view>
+      <view class="pt-foot">日干：{{result.dayGan}} · 世在{{result.primary.shi}}爻 · 应在{{result.primary.ying}}爻</view>
+    </view>
+
+  </block>
+
+  <!-- 历史记录 -->
+  <view class="g-card" wx:if="{{history.length}}">
+    <view class="sec-title row-between">
+      <text>历史记录</text>
+      <text class="clear-btn" bindtap="clearHistory">清空</text>
+    </view>
+    <view class="hist-row" wx:for="{{history}}" wx:key="_id" bindtap="viewHistory" data-id="{{item._id}}">
+      <view class="hist-sym">
+        <text class="hs-main">{{item.primarySym}}</text>
+        <text class="hs-chg" wx:if="{{item.changedSym}}">之{{item.changedSym}}</text>
+      </view>
+      <view class="hist-info">
+        <view class="hist-name">{{item.primaryName}}<text wx:if="{{item.changedName}}" class="hist-to"> 之 {{item.changedName}}</text></view>
+        <view class="hist-rule">{{item.rule}} · 日干{{item.dayGan}}</view>
+      </view>
+      <view class="hist-time">{{item.timeText}}</view>
+    </view>
+  </view>
+
+  <view class="disclaimer">六爻为传统术数文化，结果仅供娱乐与自我观照，切勿迷信。</view>
+</view>

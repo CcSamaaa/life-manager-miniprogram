@@ -1,0 +1,423 @@
+/* ====== 通用 ====== */
+.page {
+  min-height: 100vh;
+  padding: 20rpx 0 60rpx;
+  background: #f5f5f5;
+}
+.page.dark {
+  background: #1a1a1e;
+}
+
+/* ====== 表单（浅色模式）====== */
+.form .field {
+  display: flex;
+  align-items: center;
+  padding: 24rpx 0;
+  border-bottom: 1rpx solid #f0f1f3;
+}
+.form .label {
+  width: 160rpx;
+  font-size: 30rpx;
+  color: #1f1f1f;
+}
+.picker {
+  flex: 1;
+  font-size: 30rpx;
+  color: #07c160;
+}
+.radio-row {
+  flex: 1;
+  display: flex;
+}
+.radio-item {
+  margin-right: 48rpx;
+  font-size: 30rpx;
+  color: #1f1f1f;
+}
+.btn-primary {
+  margin-top: 32rpx;
+  background: #07c160;
+  color: #fff;
+}
+.btn-ghost {
+  margin-top: 20rpx;
+  background: #f0f1f3;
+  color: #1f1f1f;
+  font-size: 30rpx;
+}
+
+/* ====== 专业排盘（暗色主题）====== */
+.pro-result {
+  padding: 0;
+}
+
+/* 标题栏 */
+.pro-header {
+  padding: 32rpx 28rpx 20rpx;
+  text-align: center;
+}
+.pro-title {
+  font-size: 38rpx;
+  font-weight: 700;
+  color: #e8e6e3;
+  letter-spacing: 4rpx;
+}
+.pro-sub {
+  font-size: 24rpx;
+  color: #888;
+  margin-top: 8rpx;
+}
+
+/* Tab 栏 */
+.tab-bar {
+  display: flex;
+  margin: 0 24rpx;
+  border-bottom: 1rpx solid #333;
+}
+.tab-item {
+  flex: 1;
+  text-align: center;
+  padding: 20rpx 0;
+  font-size: 28rpx;
+  color: #888;
+  position: relative;
+}
+.tab-item.active {
+  color: #d4a853;
+  font-weight: 600;
+}
+.tab-item.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 48rpx;
+  height: 4rpx;
+  background: #d4a853;
+  border-radius: 2rpx;
+}
+
+/* 面板 */
+.panel {
+  margin: 20rpx 24rpx;
+  border-radius: 16rpx;
+  overflow: hidden;
+}
+.info-panel {
+  background: #242428;
+  padding: 24rpx;
+}
+.chart-panel {
+  background: transparent;
+  padding: 0;
+}
+
+/* ====== 信息面板 ====== */
+.info-grid {
+  display: flex;
+  flex-wrap: wrap;
+}
+.info-cell {
+  width: 50%;
+  padding: 16rpx 0;
+}
+.info-label {
+  font-size: 22rpx;
+  color: #777;
+  display: block;
+  margin-bottom: 6rpx;
+}
+.info-val {
+  font-size: 32rpx;
+  color: #e8e6e3;
+  font-weight: 500;
+}
+.info-val.bz {
+  font-weight: 700;
+  letter-spacing: 3rpx;
+  color: #d4a853;
+}
+
+.elem-section, .nayin-section {
+  margin-top: 28rpx;
+  padding-top: 20rpx;
+  border-top: 1rpx solid #333;
+}
+.section-label {
+  font-size: 24rpx;
+  color: #888;
+  display: block;
+  margin-bottom: 14rpx;
+}
+
+.elem-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 12rpx;
+}
+.elem-bar-item {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+}
+.elem-name {
+  font-size: 22rpx;
+  padding: 2rpx 14rpx;
+  border-radius: 999rpx;
+  color: #fff;
+  min-width: 56rpx;
+  text-align: center;
+}
+.bar-track {
+  flex: 1;
+  height: 10rpx;
+  background: #333;
+  border-radius: 5rpx;
+  overflow: hidden;
+}
+.bar-fill {
+  height: 100%;
+  border-radius: 5rpx;
+  transition: width 0.3s;
+}
+.bar-wood { background: #4a8c3f; }
+.bar-fire { background: #c94a4a; }
+.bar-earth { background: #b8860b; }
+.bar-metal { background: #a67c52; }
+.bar-water { background: #3a6ea5; }
+.elem-count {
+  font-size: 24rpx;
+  color: #aaa;
+  min-width: 36rpx;
+  text-align: right;
+}
+
+.nayin-row {
+  display: flex;
+  gap: 12rpx;
+}
+.nayin-cell {
+  flex: 1;
+  text-align: center;
+  padding: 12rpx 8rpx;
+  background: #1a1a1e;
+  border-radius: 8rpx;
+}
+.nayin-label {
+  font-size: 20rpx;
+  color: #666;
+  display: block;
+}
+.nayin-val {
+  font-size: 22rpx;
+  color: #bbb;
+  margin-top: 4rpx;
+  display: block;
+}
+
+/* ====== 排盘表格 ====== */
+.chart-table {
+  background: #242428;
+  border-radius: 16rpx;
+  overflow: hidden;
+}
+.ct-row {
+  display: flex;
+  align-items: stretch;
+  border-bottom: 1rpx solid rgba(255,255,255,0.06);
+}
+.ct-row:last-child {
+  border-bottom: none;
+}
+.ct-head {
+  background: rgba(212,168,83,0.08);
+}
+.ct-highlight {
+  background: rgba(255,255,255,0.02);
+}
+
+.ct-th, .ct-td {
+  flex: 1;
+  text-align: center;
+  padding: 16rpx 4rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 64rpx;
+  font-size: 26rpx;
+  color: #ccc;
+}
+.ct-th {
+  font-size: 22rpx;
+  color: #888;
+  font-weight: 500;
+  padding: 14rpx 4rpx;
+}
+.ct-row-label {
+  flex: 0 0 90rpx;
+  font-size: 22rpx;
+  color: #777;
+  background: rgba(0,0,0,0.15);
+  justify-content: flex-start;
+  padding-left: 16rpx;
+}
+.ct-head .ct-row-label {
+  background: transparent;
+  justify-content: center;
+  padding-left: 4rpx;
+}
+
+/* 天干大字 + 五行色 */
+.gan-big {
+  font-size: 44rpx;
+  font-weight: 700;
+  line-height: 1.2;
+}
+.zhi-big {
+  font-size: 44rpx;
+  font-weight: 700;
+  line-height: 1.2;
+}
+.zhi-animal {
+  font-size: 18rpx;
+  margin-left: 4rpx;
+  opacity: 0.5;
+}
+
+/* 五行颜色 - 天干地支 */
+.gan-wood { color: #5cb85c; }
+.gan-fire { color: #e07870; }
+.gan-earth { color: #d4a853; }
+.gan-metal { color: #c8a96c; }
+.gan-water { color: #6a9fd8; }
+
+.zhi-wood { color: #5cb85c; }
+.zhi-fire { color: #e07870; }
+.zhi-earth { color: #d4a853; }
+.zhi-metal { color: #c8a96c; }
+.zhi-water { color: #6a9fd8; }
+
+/* 藏干 */
+.hidden-cell {
+  gap: 4rpx;
+  flex-wrap: wrap;
+}
+.hidden-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 2rpx;
+}
+.hidden-gan {
+  font-size: 24rpx;
+  font-weight: 600;
+  line-height: 1.2;
+}
+.hidden-elem {
+  font-size: 16rpx;
+  padding: 1rpx 10rpx;
+  border-radius: 99rpx;
+  color: #fff;
+  margin-top: 1rpx;
+}
+
+/* 副星 */
+.sub-cell {
+  gap: 2rpx;
+  flex-wrap: wrap;
+}
+.sub-text {
+  font-size: 20rpx;
+  color: #aaa;
+  line-height: 1.4;
+}
+
+/* 十二长生 */
+.life-text {
+  font-size: 24rpx;
+  color: #bbb;
+}
+/* 长生/帝旺/临官 高亮 */
+.life-birth, .life-peak, .life-official { color: #d4a853; font-weight: 600; }
+/* 死/墓/绝 低亮 */
+.life-die, .life-tomb, .life-dead { color: #777; }
+
+/* 空亡 */
+.void-text {
+  font-size: 22rpx;
+  color: #e07870;
+  font-weight: 500;
+}
+.muted-text {
+  font-size: 22rpx;
+  color: #555;
+}
+
+/* 纳音文字 */
+.nayin-text {
+  font-size: 20rpx;
+  color: #9a9a9a;
+}
+
+/* 神煞 */
+.ct-sha-row .ct-td {
+  align-items: flex-start;
+  padding: 12rpx 4rpx;
+  gap: 4rpx;
+}
+.sha-text {
+  font-size: 18rpx;
+  color: #aaa;
+  line-height: 1.5;
+  padding: 2rpx 8rpx;
+  background: rgba(255,255,255,0.04);
+  border-radius: 4rpx;
+  margin: 1rpx;
+}
+
+/* Chip (五行标签) */
+.chip {
+  font-size: 20rpx;
+  padding: 4rpx 14rpx;
+  border-radius: 99rpx;
+  color: #fff;
+}
+.chip-wood { background: #3B6D11; }
+.chip-fire { background: #A32D2D; }
+.chip-earth { background: #854F0B; }
+.chip-metal { background: #633806; }
+.chip-water { background: #0C447C; }
+
+/* 十神文字 */
+.god-text {
+  font-size: 24rpx;
+  color: #bbb;
+}
+
+/* 底部 */
+.pro-footer {
+  padding: 24rpx 28rpx 40rpx;
+}
+.disclaimer {
+  font-size: 20rpx;
+  line-height: 1.6;
+  text-align: center;
+  margin-bottom: 20rpx;
+}
+.muted {
+  color: #666;
+}
+.btn-edit {
+  background: #333;
+  color: #ccc;
+  font-size: 28rpx;
+  border-radius: 12rpx;
+}
+
+/* ===== 全局深色模式（作用于表单区域）===== */
+.page.dark .form .field { border-bottom: 1rpx solid #2b2f36; }
+.page.dark .form .label { color: #c8ccd2; }
+.page.dark .radio-item { color: #d6d9de; }
+.page.dark .btn-ghost { background: #2b2f36; color: #c8ccd2; }

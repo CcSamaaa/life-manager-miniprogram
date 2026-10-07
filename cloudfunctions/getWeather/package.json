@@ -1,0 +1,1 @@
+{"name": "getWeather", "version": "1.0.0", "description": "代理 Open-Meteo 天气接口（零外部依赖，仅用 wx-server-sdk + Node 内置 https）", "main": "index.js", "dependencies": {"wx-server-sdk": "~2.6.3"}}

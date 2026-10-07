@@ -1,0 +1,88 @@
+<view class="page {{theme}}">
+  <!-- 日历卡片 -->
+  <view class="cal-card">
+    <view class="cal-head">
+      <text class="nav-btn" bindtap="prevMonth">‹</text>
+      <view class="cal-title">{{year}} 年 {{month}} 月</view>
+      <text class="nav-btn" bindtap="nextMonth">›</text>
+    </view>
+    <view class="cal-week">
+      <text wx:for="{{weekHeaders}}" wx:key="*this" class="wk">{{item}}</text>
+    </view>
+    <view class="cal-grid">
+      <view
+        wx:for="{{cells}}"
+        wx:key="date"
+        class="cell {{item.inMonth ? '' : 'out'}} {{item.isToday ? 'today' : ''}} {{item.date === selectedDate ? 'sel' : ''}}"
+        data-date="{{item.date}}"
+        bindtap="selectDate">
+        <view class="day">{{item.day}}</view>
+        <view wx:if="{{item.tags.length}}" class="tags">
+          <text wx:for="{{item.tags}}" wx:for-item="t" wx:key="*this" class="tag">{{t}}</text>
+          <text wx:if="{{item.more > 0}}" class="tag more">+{{item.more}}</text>
+        </view>
+      </view>
+    </view>
+    <view class="cal-foot">
+      <text class="back-today" bindtap="backToday">回到本月</text>
+    </view>
+  </view>
+
+  <!-- 选中日规划面板 -->
+  <view class="panel">
+    <view class="panel-head">
+      <text class="ph-date">{{selectedDate}}</text>
+      <text class="ph-tip">点下方食物加入这天</text>
+    </view>
+
+    <!-- 这天已安排 -->
+    <view class="day-list">
+      <text wx:if="{{dayFoods.length === 0}}" class="empty">还没安排，挑点想吃的吧～</text>
+      <view wx:for="{{dayFoods}}" wx:key="*this" class="day-chip">
+        <text>{{item}}</text>
+        <text class="x" data-name="{{item}}" catchtap="removeFood">×</text>
+      </view>
+    </view>
+
+    <!-- 常用食物 -->
+    <view class="sec-title">常用</view>
+    <view class="food-grid">
+      <view
+        wx:for="{{presetView}}"
+        wx:key="name"
+        class="food-chip {{item.active ? 'active' : ''}}"
+        data-name="{{item.name}}"
+        bindtap="toggleFood">{{item.name}}</view>
+    </view>
+
+    <!-- 我的收藏 -->
+    <view class="sec-title">
+      <text class="st-text">我的收藏<text class="sec-tip">（长按可删除）</text></text>
+      <text class="add-toggle" bindtap="toggleAdd">{{adding ? '收起' : '＋ 添加'}}</text>
+    </view>
+    <view wx:if="{{adding}}" class="add-row">
+      <input
+        class="add-input"
+        value="{{newCustom}}"
+        placeholder="输入自定义食物，如：麻辣拌"
+        placeholder-class="add-ph"
+        maxlength="10"
+        bindinput="onCustomInput"
+        confirm-type="done"
+        bindconfirm="confirmAddCustom" />
+      <text class="add-btn" bindtap="confirmAddCustom">添加</text>
+    </view>
+    <view class="food-grid">
+      <view wx:if="{{customView.length === 0 && !adding}}" class="empty small">还没有收藏，点「＋ 添加」存一个吧</view>
+      <view
+        wx:for="{{customView}}"
+        wx:key="name"
+        class="food-chip custom {{item.active ? 'active' : ''}}"
+        data-name="{{item.name}}"
+        bindtap="toggleFood"
+        bindlongpress="onCustomLongPress">{{item.name}}</view>
+    </view>
+  </view>
+
+  <view class="hint">日历上会显示每天的安排，点击日期即可规划</view>
+</view>

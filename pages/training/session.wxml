@@ -1,0 +1,162 @@
+<view class="page">
+  <!-- 顶部：计时器 + 返回 -->
+  <view class="top-bar">
+    <view class="timer-wrap" bindtap="toggleTimer">
+      <text class="timer-text">{{timerText}}</text>
+      <view class="timer-btn {{running?'':'paused'}}">▶</view>
+    </view>
+    <view class="top-actions">
+      <view class="back-btn" bindtap="back">返回</view>
+    </view>
+  </view>
+
+  <!-- 标题与统计 -->
+  <view class="title-row">
+    <view class="title-edit">
+      <text class="title-icon">✎</text>
+      <input class="title-input" value="{{title}}" bindinput="onTitle" placeholder="点击输入训练标题" placeholder-class="title-placeholder" />
+    </view>
+    <view class="title-stats">
+      <text class="stat">{{summary ? summary.setCount : totalDoneSets}}/{{totalSets}}组</text>
+      <text class="stat">{{exercises.length}}/{{exercises.length}}动作</text>
+      <text class="stat">{{currentVolume}}/{{targetVolume}}容量</text>
+    </view>
+  </view>
+
+  <scroll-view scroll-y class="session-body" wx:if="{{!finished}}">
+    <view class="ex-block" wx:for="{{exercises}}" wx:key="exId" wx:for-index="ei">
+      <view class="ex-block-head">
+        <view class="ex-info">
+          <view class="ex-avatar" style="border-color:{{groupColor[item.group]}}">{{item.exName[0]}}</view>
+          <view class="ex-title">
+            <text class="ex-block-name">{{item.exName}}</text>
+            <text class="ex-block-volume">{{item.currentVol}}/{{item.targetVol}}</text>
+          </view>
+        </view>
+        <view class="ex-gear" bindtap="noop">⚙</view>
+      </view>
+
+      <input wx:if="{{false}}" class="ex-notes" placeholder="点击输入备注" />
+
+      <view class="timer-switch">
+        <text class="switch-label">每组计时</text>
+        <switch class="switch-ctrl" checked color="#4cd964" />
+      </view>
+
+      <!-- 组列表 -->
+      <view class="set-row" wx:for="{{item.setsData}}" wx:for-item="s" wx:for-index="si" wx:key="si">
+        <text class="set-idx">{{si+1}}</text>
+        <view class="set-input-wrap">
+          <text class="input-unit input-unit-left">kg</text>
+          <input class="set-input" type="digit" placeholder="0" value="{{s.weight}}" data-ei="{{ei}}" data-si="{{si}}" bindinput="onWeight" />
+        </view>
+        <view class="set-input-wrap">
+          <text class="input-unit input-unit-right">次</text>
+          <input class="set-input" type="number" placeholder="0" value="{{s.reps}}" data-ei="{{ei}}" data-si="{{si}}" bindinput="onReps" />
+        </view>
+        <view class="set-done {{s.done?'on':''}}" data-ei="{{ei}}" data-si="{{si}}" bindtap="toggleDone">
+          <text wx:if="{{s.done}}">✓</text>
+          <text wx:else>完成</text>
+        </view>
+        <view class="set-meta">
+          <text class="set-time">{{s.elapsedText}}</text>
+          <text class="set-more" data-ei="{{ei}}" data-si="{{si}}" bindtap="removeSet">⋮</text>
+        </view>
+      </view>
+
+      <!-- 新加一组 -->
+      <view class="add-set" data-ei="{{ei}}" bindtap="addSet">+ 新加一组</view>
+    </view>
+
+    <!-- 难度评估 -->
+    <view class="difficulty-wrap">
+      <view class="diff-item {{difficulty==='easy'?'on':''}}" data-v="easy" bindtap="setDifficulty">
+        <view class="diff-ring"></view>
+        <text class="diff-label">简单</text>
+      </view>
+      <view class="diff-item {{difficulty==='normal'?'on':''}}" data-v="normal" bindtap="setDifficulty">
+        <view class="diff-ring"></view>
+        <text class="diff-label">正常</text>
+      </view>
+      <view class="diff-item {{difficulty==='hard'?'on':''}}" data-v="hard" bindtap="setDifficulty">
+        <view class="diff-ring"></view>
+        <text class="diff-label">困难</text>
+      </view>
+    </view>
+
+    <view class="bottom-space"></view>
+  </scroll-view>
+
+  <!-- 心得输入 -->
+  <view wx:if="{{showNotesInput && !finished}}" class="notes-mask" bindtap="toggleNotes">
+    <view class="notes-sheet" catchtap="noop">
+      <view class="notes-title">训练心得</view>
+      <textarea class="notes-area" value="{{notes}}" bindinput="onNotes" placeholder="记录今天的训练感受..." />
+      <view class="notes-btn" bindtap="toggleNotes">确定</view>
+    </view>
+  </view>
+
+  <!-- 组间休息：右下角悬浮环形计时（不打断操作） -->
+  <view wx:if="{{rest.show}}" class="rest-float">
+    <view class="rest-float-label">{{rest.label}}</view>
+    <canvas type="2d" id="restRing" class="rest-ring-canvas"></canvas>
+    <view class="rest-float-center">
+      <text class="rest-float-sec">{{rest.sec}}</text>
+      <text class="rest-float-unit">秒</text>
+    </view>
+    <view class="rest-float-skip" catchtap="skipRest">跳过休息</view>
+  </view>
+
+  <!-- 完成页 -->
+  <view wx:if="{{finished}}" class="finished">
+    <view class="finish-title">训练完成</view>
+    <view class="finish-row">总容量 <text class="finish-num">{{summary.volume}}</text> kg</view>
+    <view class="finish-row">完成 <text class="finish-num">{{summary.setCount}}</text> 组 · <text class="finish-num">{{summary.exerciseCount}}</text> 个动作</view>
+    <view class="finish-row">用时 <text class="finish-num">{{summary.durationText}}</text></view>
+    <view class="finish-pr" wx:if="{{summary.prs.length}}">
+      <view class="finish-pr-title">本次重量亮点</view>
+      <view class="finish-pr-item" wx:for="{{summary.prs}}" wx:key="exName">{{item.exName}} · {{item.weight}}kg</view>
+    </view>
+    <view class="finish-btn" bindtap="back">返回计划</view>
+  </view>
+
+  <!-- 底部 tab：训练时才显示 -->
+  <view wx:if="{{!finished}}" class="bottom-tab">
+    <view class="tab-item" bindtap="minimize">
+      <view class="tab-icon">↙</view>
+      <text class="tab-label">最小化</text>
+    </view>
+    <view class="tab-item" bindtap="openExPicker">
+      <view class="tab-icon tab-add">+</view>
+      <text class="tab-label">加动作</text>
+    </view>
+    <view class="tab-item" bindtap="toggleNotes">
+      <view class="tab-icon">📝</view>
+      <text class="tab-label">写心得</text>
+    </view>
+    <view class="tab-item" bindtap="noop">
+      <view class="tab-icon">⚙</view>
+      <text class="tab-label">设置</text>
+    </view>
+  </view>
+
+  <!-- 动作选择器 -->
+  <view wx:if="{{exPicker.show}}" class="sheet-mask" bindtap="closeExPicker">
+    <view class="sheet picker" catchtap="noop">
+      <view class="sheet-head">
+        <text class="sheet-title">选择动作</text>
+        <text class="sheet-close" bindtap="closeExPicker">✕</text>
+      </view>
+      <view class="search"><input class="search-input" value="{{exPicker.kw}}" bindinput="onPickKw" placeholder="搜索动作" /></view>
+      <scroll-view scroll-y class="sheet-body">
+        <view class="pick-item" wx:for="{{exPicker.list}}" wx:key="id" data-exid="{{item.id}}" bindtap="addExercise">
+          <text class="pick-name">{{item.name}}</text>
+          <text class="pick-group">{{item.group}} · {{item.equip}}</text>
+        </view>
+      </scroll-view>
+    </view>
+  </view>
+
+  <!-- 悬浮结束按钮 -->
+  <view wx:if="{{!finished}}" class="finish-float" bindtap="finish">结束训练</view>
+</view>

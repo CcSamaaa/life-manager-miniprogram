@@ -1,0 +1,60 @@
+<view class="page">
+  <view class="hero">
+    <view class="hero-title" bindlongpress="resetForTest">每日一签</view>
+    <view class="hero-date">{{today}}</view>
+    <view class="hero-tip">心诚则灵 · 每日一签，今日运势由你揭晓</view>
+  </view>
+
+  <!-- 未抽签 -->
+  <block wx:if="{{!hasDrawn}}">
+    <view class="sec-label">选择签筒</view>
+    <view class="cat-grid">
+      <view
+        wx:for="{{categories}}"
+        wx:key="key"
+        class="cat {{selectedKey === item.key ? 'on' : ''}}"
+        data-key="{{item.key}}"
+        bindtap="selectCategory"
+      >
+        <text class="cat-icon">{{item.icon}}</text>
+        <text class="cat-name">{{item.name}}</text>
+        <text class="cat-desc">{{item.desc}}</text>
+      </view>
+    </view>
+
+    <view class="tube-wrap">
+      <view class="tube {{drawing ? 'shake' : ''}}">
+        <view class="tube-top"></view>
+        <view class="tube-sticks">
+          <view class="stick" wx:for="{{[1,2,3,4,5]}}" wx:key="*this"></view>
+        </view>
+      </view>
+      <view wx:if="{{drawing}}" class="drawing-text">签筒摇动中…</view>
+    </view>
+
+    <view class="draw-btn {{selectedKey ? '' : 'disabled'}}" bindtap="draw">
+      {{drawing ? '抽签中…' : (selectedKey ? '诚心求签' : '先选一个签筒')}}
+    </view>
+  </block>
+
+  <!-- 已抽签 -->
+  <block wx:else>
+    <view class="result">
+      <view class="res-cat">{{categoryName}} · 今日签</view>
+      <view class="res-level" style="color:{{result.color}};border-color:{{result.color}}">{{result.level}}</view>
+      <view class="res-poem">「{{result.poem}}」</view>
+      <view class="res-interpret">{{result.interpret}}</view>
+      <view class="res-yj">
+        <view class="yj yi">
+          <view class="yj-h">宜</view>
+          <view class="yj-b">{{result.yi}}</view>
+        </view>
+        <view class="yj ji">
+          <view class="yj-h">忌</view>
+          <view class="yj-b">{{result.ji}}</view>
+        </view>
+      </view>
+    </view>
+    <view class="drawn-tip">今日已抽签 · 明日可再求一签 ✦</view>
+  </block>
+</view>

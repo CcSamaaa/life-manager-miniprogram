@@ -1,0 +1,174 @@
+.page {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  box-sizing: border-box;
+}
+.scroll {
+  flex: 1;
+  height: 0;
+}
+
+.hero {
+  padding: 40rpx 40rpx 20rpx;
+}
+.hero-title {
+  font-size: 44rpx;
+  font-weight: 700;
+  color: #1f1f1f;
+}
+.hero-sub {
+  margin-top: 8rpx;
+  font-size: 26rpx;
+  color: #9aa0a6;
+}
+
+.hero-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.sort-btn {
+  margin-top: 8rpx;
+  font-size: 24rpx;
+  color: #07c160;
+  padding: 6rpx 20rpx;
+  border: 1rpx solid #07c160;
+  border-radius: 30rpx;
+}
+
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 20rpx 24rpx;
+}
+/* 编辑态：切换为绝对定位网格，拖拽用 transform 平移避免重排闪烁 */
+.grid-abs {
+  display: block;
+  position: relative;
+}
+
+.cell {
+  width: 31%;
+  margin: 12rpx 1%;
+  background: #fff;
+  border-radius: 20rpx;
+  padding: 36rpx 16rpx;
+  box-sizing: border-box;
+  text-align: center;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.04);
+  transition: transform 0.2s ease;
+}
+.grid-abs .cell {
+  position: absolute;
+  left: 0;
+  top: 0;
+  margin: 0;
+}
+
+.cell-icon {
+  font-size: 64rpx;
+  line-height: 1;
+}
+
+.cell-name {
+  margin-top: 18rpx;
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #1f1f1f;
+}
+
+.cell-desc {
+  margin-top: 8rpx;
+  font-size: 20rpx;
+  color: #9aa0a6;
+  line-height: 1.4;
+}
+
+.cell.editing {
+  box-shadow: 0 2rpx 12rpx rgba(7,193,96,0.25);
+}
+/* 正在拖动的卡片：跟手（无过渡）、放大并抬升层级 */
+.cell-dragging {
+  transition: none;
+  opacity: 0.95;
+  box-shadow: 0 10rpx 28rpx rgba(7,193,96,0.45);
+  z-index: 30;
+}
+/* 管理态下被隐藏的卡片置灰 */
+.cell-hidden {
+  opacity: 0.45;
+  filter: grayscale(0.85);
+}
+.cell-actions {
+  position: absolute;
+  top: 8rpx;
+  right: 8rpx;
+  display: flex;
+  align-items: center;
+}
+.hide-btn {
+  font-size: 22rpx;
+  color: #ff8f1f;
+  font-weight: 600;
+  padding: 2rpx 12rpx;
+  margin-left: 4rpx;
+  border: 1rpx solid #ff8f1f;
+  border-radius: 20rpx;
+  line-height: 1.4;
+}
+.hidden-tag {
+  margin-top: 10rpx;
+  font-size: 20rpx;
+  color: #ff8f1f;
+}
+.cell {
+  position: relative;
+}
+
+/* 已隐藏功能：底部独立区域，不参与排序 */
+.hidden-section {
+  padding: 10rpx 24rpx 40rpx;
+}
+.hidden-title {
+  margin: 20rpx 0 16rpx;
+  font-size: 24rpx;
+  color: #9aa0a6;
+  font-weight: 600;
+}
+.hidden-grid {
+  display: flex;
+  flex-wrap: wrap;
+}
+.hidden-grid .cell {
+  opacity: 0.45;
+  filter: grayscale(0.85);
+}
+/* 调整态下被拖卡片的顶部提示 */
+.adjust-hint {
+  position: absolute;
+  bottom: 10rpx;
+  left: 0;
+  right: 0;
+  font-size: 18rpx;
+  color: #07c160;
+}
+
+/* ===== 深色模式 ===== */
+.page.dark { background: #15171a; }
+.page.dark .hero-title { color: #f0f2f5; }
+.page.dark .hero-sub { color: #8b9098; }
+.page.dark .cell {
+  background: #23262b;
+  box-shadow: 0 2rpx 12rpx rgba(0,0,0,0.3);
+}
+.page.dark .cell-name { color: #f0f2f5; }
+.page.dark .cell-desc { color: #8b9098; }
+.page.dark .cell.editing { box-shadow: 0 2rpx 12rpx rgba(7,193,96,0.3); }
+.page.dark .cell-hidden { opacity: 0.4; }
+.page.dark .hide-btn { color: #ffb05c; border-color: #ffb05c; }
+.page.dark .hidden-tag { color: #ffb05c; }
+.page.dark .hidden-title { color: #8b9098; }
+.page.dark .adjust-hint { color: #4cd08a; }
+

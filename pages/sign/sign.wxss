@@ -1,0 +1,221 @@
+.page {
+  min-height: 100vh;
+  background:
+    radial-gradient(120% 80% at 50% 0%, #2a2140 0%, #16111f 55%, #0e0b16 100%);
+  padding: 40rpx 36rpx calc(60rpx + env(safe-area-inset-bottom));
+  box-sizing: border-box;
+}
+
+/* 顶部 */
+.hero { text-align: center; margin-bottom: 36rpx; }
+.hero-title {
+  font-size: 60rpx;
+  font-weight: 800;
+  letter-spacing: 8rpx;
+  font-family: "Songti SC", "STSong", serif;
+  background: linear-gradient(180deg, #f6e2a0 0%, #e9c46a 45%, #c79a3a 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.hero-date {
+  margin-top: 12rpx;
+  font-size: 26rpx;
+  color: #c9b88a;
+  letter-spacing: 2rpx;
+}
+.hero-tip {
+  margin-top: 10rpx;
+  font-size: 22rpx;
+  color: #8a8270;
+}
+
+/* 档位 */
+.sec-label {
+  font-size: 24rpx;
+  color: #b9a877;
+  letter-spacing: 2rpx;
+  margin: 8rpx 0 18rpx;
+}
+.cat-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+.cat {
+  width: 31.5%;
+  box-sizing: border-box;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1rpx solid rgba(233, 196, 106, 0.18);
+  border-radius: 20rpx;
+  padding: 22rpx 0 18rpx;
+  margin-bottom: 18rpx;
+  text-align: center;
+  transition: all 0.2s;
+}
+.cat.on {
+  background: rgba(233, 196, 106, 0.14);
+  border-color: #e9c46a;
+  box-shadow: 0 0 20rpx rgba(233, 196, 106, 0.25);
+}
+.cat-icon { font-size: 44rpx; display: block; line-height: 1; }
+.cat-name {
+  display: block;
+  margin-top: 12rpx;
+  font-size: 26rpx;
+  color: #f3ead2;
+  font-weight: 600;
+}
+.cat-desc {
+  display: block;
+  margin-top: 6rpx;
+  font-size: 20rpx;
+  color: #9a9078;
+}
+
+/* 签筒 */
+.tube-wrap { text-align: center; margin: 30rpx 0 10rpx; }
+.tube {
+  position: relative;
+  width: 170rpx;
+  height: 230rpx;
+  margin: 0 auto;
+  background: linear-gradient(180deg, #b9852f 0%, #8a5e1f 60%, #6e4a17 100%);
+  border-radius: 18rpx 18rpx 22rpx 22rpx;
+  border: 1rpx solid rgba(246, 226, 160, 0.5);
+  box-shadow: inset 0 0 24rpx rgba(0, 0, 0, 0.35), 0 8rpx 24rpx rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+}
+.tube-top {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 26rpx;
+  background: linear-gradient(180deg, #f6e2a0, #d8b25a);
+  border-bottom: 1rpx solid rgba(0, 0, 0, 0.2);
+}
+.tube-sticks {
+  position: absolute;
+  top: -34rpx; left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10rpx;
+  justify-content: center;
+}
+.stick {
+  width: 12rpx;
+  height: 70rpx;
+  background: linear-gradient(180deg, #fff4d6, #e8c987);
+  border-radius: 6rpx 6rpx 0 0;
+  transform: rotate(-2deg);
+}
+.stick:nth-child(2) { transform: rotate(3deg); height: 84rpx; }
+.stick:nth-child(3) { transform: rotate(-4deg); height: 76rpx; }
+.stick:nth-child(4) { transform: rotate(2deg); height: 80rpx; }
+.stick:nth-child(5) { transform: rotate(-1deg); height: 72rpx; }
+
+.tube.shake { animation: shake 0.5s ease-in-out infinite; }
+@keyframes shake {
+  0%, 100% { transform: rotate(0deg); }
+  20% { transform: rotate(-9deg); }
+  40% { transform: rotate(9deg); }
+  60% { transform: rotate(-6deg); }
+  80% { transform: rotate(6deg); }
+}
+.drawing-text {
+  margin-top: 22rpx;
+  font-size: 26rpx;
+  color: #e9c46a;
+  letter-spacing: 3rpx;
+}
+
+/* 求签按钮 */
+.draw-btn {
+  margin: 28rpx auto 0;
+  width: 70%;
+  text-align: center;
+  padding: 28rpx 0;
+  border-radius: 48rpx;
+  font-size: 30rpx;
+  font-weight: 700;
+  letter-spacing: 4rpx;
+  color: #2a2140;
+  background: linear-gradient(180deg, #f6e2a0, #e0b85a);
+  box-shadow: 0 8rpx 22rpx rgba(233, 196, 106, 0.35);
+}
+.draw-btn.disabled {
+  color: #6b6356;
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: none;
+  border: 1rpx solid rgba(255, 255, 255, 0.12);
+}
+
+/* 结果卡片 */
+.result {
+  margin-top: 20rpx;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1rpx solid rgba(233, 196, 106, 0.35);
+  border-radius: 28rpx;
+  padding: 40rpx 36rpx 36rpx;
+  box-shadow: 0 8rpx 30rpx rgba(0, 0, 0, 0.3);
+}
+.res-cat {
+  text-align: center;
+  font-size: 24rpx;
+  color: #c9b88a;
+  letter-spacing: 3rpx;
+}
+.res-level {
+  margin: 22rpx auto 8rpx;
+  width: fit-content;
+  padding: 14rpx 44rpx;
+  font-size: 44rpx;
+  font-weight: 800;
+  font-family: "Songti SC", "STSong", serif;
+  letter-spacing: 6rpx;
+  border: 2rpx solid;
+  border-radius: 16rpx;
+}
+.res-poem {
+  margin-top: 22rpx;
+  text-align: center;
+  font-size: 32rpx;
+  color: #f3ead2;
+  font-family: "Songti SC", "STSong", serif;
+  line-height: 1.6;
+}
+.res-interpret {
+  margin-top: 24rpx;
+  font-size: 27rpx;
+  color: #d8cfba;
+  line-height: 1.8;
+  letter-spacing: 1rpx;
+}
+.res-yj {
+  display: flex;
+  gap: 20rpx;
+  margin-top: 32rpx;
+}
+.yj {
+  flex: 1;
+  border-radius: 16rpx;
+  padding: 20rpx;
+  background: rgba(0, 0, 0, 0.18);
+}
+.yj.yi { border: 1rpx solid rgba(42, 157, 143, 0.5); }
+.yj.ji { border: 1rpx solid rgba(231, 111, 81, 0.5); }
+.yj-h {
+  font-size: 28rpx;
+  font-weight: 800;
+  margin-bottom: 10rpx;
+}
+.yj.yi .yj-h { color: #4fd1c0; }
+.yj.ji .yj-h { color: #f08a6e; }
+.yj-b { font-size: 24rpx; color: #d8cfba; line-height: 1.6; }
+
+.drawn-tip {
+  margin-top: 30rpx;
+  text-align: center;
+  font-size: 24rpx;
+  color: #9a9078;
+  letter-spacing: 2rpx;
+}

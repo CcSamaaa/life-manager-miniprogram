@@ -1,0 +1,217 @@
+<view class="page {{theme}}">
+  <view class="header-simple">
+    <view class="greeting-main">
+      <text class="greeting-line">{{nickname || '微信用户'}}，{{greeting}}，今天是{{todayDate}}</text>
+    </view>
+    <text class="sort-btn-simple" bindtap="toggleEdit">{{editing ? '完成' : '排序'}}</text>
+  </view>
+
+  <view wx:if="{{loading}}" class="muted center loading">加载中…</view>
+
+  <block wx:else>
+    <view class="cards">
+    <!-- 习惯打卡 -->
+    <view class="card" style="order:{{cardOrder.habit}}">
+      <view class="card-head" bindtap="toggleHabit">
+        <view class="card-title"><text class="ic">✅</text> 习惯打卡<text wx:if="{{habitTotal > 0}}" class="todo-count">{{habitRemaining}}/{{habitTotal}}</text></view>
+        <view class="head-right">
+          <block wx:if="{{editing}}">
+            <text class="move-btn" catchtap="moveCard" data-key="habit" data-dir="up">↑</text>
+            <text class="move-btn" catchtap="moveCard" data-key="habit" data-dir="down">↓</text>
+          </block>
+          <text wx:if="{{!editing}}" class="manage" catchtap="goHabits">管理</text>
+          <text class="chev {{habitOpen ? 'up' : ''}}">⌄</text>
+        </view>
+      </view>
+      <view wx:if="{{habitOpen}}" class="card-body">
+        <habit-item
+          wx:for="{{habits}}"
+          wx:key="_id"
+          habitId="{{item._id}}"
+          emoji="{{item.emoji}}"
+          name="{{item.name}}"
+          targetType="{{item.targetType}}"
+          doneToday="{{item.doneToday}}"
+          weeklyDone="{{item.weeklyDone}}"
+          weeklyTarget="{{item.targetCount}}"
+          actionable="{{true}}"
+          bind:tap="onHabitTap" />
+        <view wx:if="{{habits.length === 0}}" class="muted center empty">
+          还没有习惯，点右上角「管理」去添加 ✨
+        </view>
+      </view>
+    </view>
+
+    <!-- 天气 -->
+    <view class="card" style="order:{{cardOrder.weather}}">
+      <view class="card-head" bindtap="toggleWeather">
+        <view class="card-title"><text class="ic">🌤️</text> 天气</view>
+        <view class="head-right">
+          <block wx:if="{{editing}}">
+            <text class="move-btn" catchtap="moveCard" data-key="weather" data-dir="up">↑</text>
+            <text class="move-btn" catchtap="moveCard" data-key="weather" data-dir="down">↓</text>
+          </block>
+          <text class="chev {{weatherOpen ? 'up' : ''}}">⌄</text>
+        </view>
+      </view>
+      <view wx:if="{{weatherOpen}}" class="card-body">
+        <view wx:if="{{weatherHint}}" class="muted center weather-hint">{{weatherHint}}</view>
+        <view wx:for="{{weatherCities}}" wx:key="key" class="weather-card">
+          <view wx:if="{{item.loading}}" class="weather-loading">获取中…</view>
+          <block wx:else>
+            <view class="wc-top">
+              <view class="wc-name">
+                {{item.name}}
+                <text wx:if="{{item.isLoc}}" class="loc-tag">定位</text>
+              </view>
+              <text wx:if="{{item.err}}" class="wc-err">{{item.err}}</text>
+              <text wx:else class="wc-del" catchtap="removeCity" data-key="{{item.key}}">✕</text>
+            </view>
+            <view wx:if="{{!item.err}}" class="wc-main">
+              <text class="wc-icon">{{item.icon}}</text>
+              <text class="wc-temp">{{item.temp}}°</text>
+              <view class="wc-meta">
+                <view class="wc-text">{{item.text}}</view>
+                <view class="wc-sub">体感 {{item.feels}}° · 湿度 {{item.humidity}}% · 风 {{item.wind}}km/h</view>
+              </view>
+            </view>
+          </block>
+        </view>
+        <view class="add-city" bindtap="addCity">＋ 添加城市</view>
+      </view>
+    </view>
+
+    <!-- 黄历 -->
+    <!-- AUDIT-HIDDEN 占卜内容（黄历+每日一签入口），过审后删除下一行的 wx:if="{{false}}" 即可恢复 -->
+    <view class="card" style="order:{{cardOrder.almanac}}" wx:if="{{false}}">
+      <view class="card-head" bindtap="toggleAlmanac">
+        <view class="card-title"><text class="ic">📅</text> 黄历</view>
+        <view class="head-right">
+          <block wx:if="{{editing}}">
+            <text class="move-btn" catchtap="moveCard" data-key="almanac" data-dir="up">↑</text>
+            <text class="move-btn" catchtap="moveCard" data-key="almanac" data-dir="down">↓</text>
+          </block>
+          <text wx:if="{{!editing}}" class="manage" catchtap="goSign">每日一签</text>
+          <text class="chev {{almanacOpen ? 'up' : ''}}">⌄</text>
+        </view>
+      </view>
+      <view wx:if="{{almanacOpen && almanac}}" class="card-body">
+        <view class="al-top">
+          <view class="al-lunar">农历 {{almanac.lunarDateText}}</view>
+          <view class="al-gz">{{almanac.gzYear}}年 · {{almanac.animal}}</view>
+        </view>
+
+        <view class="al-row"><text class="al-k">干支</text><text class="al-v">{{almanac.gzMonth}}月 {{almanac.gzDay}}日</text></view>
+        <view class="al-row"><text class="al-k">五行</text><text class="al-v">{{almanac.naYin}}</text></view>
+        <view class="al-row"><text class="al-k">建除</text><text class="al-v">{{almanac.jianchu}}日</text></view>
+        <view wx:if="{{almanac.term}}" class="al-row"><text class="al-k">节气</text><text class="al-v">{{almanac.term}}</text></view>
+        <view wx:if="{{almanac.festival}}" class="al-row"><text class="al-k">节日</text><text class="al-v hl">{{almanac.festival}}</text></view>
+        <view class="al-row"><text class="al-k">冲煞</text><text class="al-v">{{almanac.chongSha}}</text></view>
+
+        <view class="al-yj">
+          <view class="yj-block yi">
+            <view class="yj-title">宜</view>
+            <view class="yj-text">{{almanac.yi}}</view>
+          </view>
+          <view class="yj-block ji">
+            <view class="yj-title">忌</view>
+            <view class="yj-text">{{almanac.ji}}</view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 热量计算 -->
+    <view class="card" style="order:{{cardOrder.calorie}}">
+      <view class="card-head" bindtap="toggleCalorie">
+        <view class="card-title"><text class="ic">🔥</text> 热量计算</view>
+        <view class="head-right">
+          <block wx:if="{{editing}}">
+            <text class="move-btn" catchtap="moveCard" data-key="calorie" data-dir="up">↑</text>
+            <text class="move-btn" catchtap="moveCard" data-key="calorie" data-dir="down">↓</text>
+          </block>
+          <text class="chev {{calorieOpen ? 'up' : ''}}">⌄</text>
+        </view>
+      </view>
+      <view wx:if="{{calorieOpen}}" class="card-body">
+        <block wx:if="{{hasProfile}}">
+          <!-- 净平衡总览 -->
+          <view class="cal-summary {{balance.status}}">
+            <view class="cs-top">
+              <text class="cs-label">{{balance.status === 'deficit' ? '今日热量缺口' : (balance.status === 'surplus' ? '今日热量盈余' : '热量平衡')}}</text>
+              <text class="cs-num">{{balance.absNet}} kcal</text>
+            </view>
+            <view class="cs-bar">
+              <view class="cs-fill" style="width:{{intakePercent}}%"></view>
+            </view>
+            <view class="cs-sub">摄入占比 {{intakePercent}}%（满格为收支平衡）</view>
+          </view>
+
+          <view class="cal-row" bindtap="goFood">
+            <text class="ck">🍱 今日摄入</text>
+            <text class="cv">{{intake}} kcal ›</text>
+          </view>
+          <view class="cal-row" bindtap="goTraining">
+            <text class="ck">🏋️ 运动消耗</text>
+            <text class="cv">{{burned}} kcal ›</text>
+          </view>
+          <view class="cal-row">
+            <text class="ck">🚶 日常活动 ({{activityLabel}})</text>
+            <text class="cv">{{dailyActivity}} kcal</text>
+          </view>
+          <view class="cal-row">
+            <text class="ck">🌡️ 基础代谢</text>
+            <text class="cv">{{bmr}} kcal</text>
+          </view>
+          <view class="cal-row total">
+            <text class="ck">合计消耗</text>
+            <text class="cv">{{totalBurned}} kcal</text>
+          </view>
+          <view class="cal-tip">估算依据：训练容量/时长 + 日常活动(按活动系数) + 基础代谢，仅供参考</view>
+        </block>
+        <view wx:else class="muted center cal-empty">
+          请先在「我的」中填写性别 / 年龄 / 身高 / 体重，
+          <text class="link" catchtap="goMine">去设置 ›</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 待办事项 -->
+    <view class="card" style="order:{{cardOrder.todo}}">
+      <view class="card-head" bindtap="toggleTodo">
+        <view class="card-title">
+          <text class="ic">📝</text> 待办事项
+          <text wx:if="{{todoTotal > 0}}" class="todo-count">{{todoRemaining}}/{{todoTotal}}</text>
+        </view>
+        <view class="head-right">
+          <block wx:if="{{editing}}">
+            <text class="move-btn" catchtap="moveCard" data-key="todo" data-dir="up">↑</text>
+            <text class="move-btn" catchtap="moveCard" data-key="todo" data-dir="down">↓</text>
+          </block>
+          <text class="chev {{todoOpen ? 'up' : ''}}">⌄</text>
+        </view>
+      </view>
+      <view wx:if="{{todoOpen}}" class="card-body">
+        <view class="todo-add">
+          <input
+            class="todo-input"
+            value="{{todoInput}}"
+            placeholder="添加待办…"
+            placeholder-class="todo-ph"
+            bindinput="onTodoInput"
+            bindconfirm="addTodo"
+            confirm-type="done"
+          />
+          <text class="todo-add-btn" catchtap="addTodo">添加</text>
+        </view>
+        <view wx:if="{{todos.length === 0}}" class="muted center empty">暂无待办，添加一条吧</view>
+        <view wx:for="{{todos}}" wx:key="_id" class="todo-item">
+          <view class="todo-check {{item.done ? 'done' : ''}}" catchtap="toggleTodoItem" data-id="{{item._id}}">{{item.done ? '✓' : ''}}</view>
+          <text class="todo-text {{item.done ? 'done' : ''}}" catchtap="toggleTodoItem" data-id="{{item._id}}">{{item.text}}</text>
+          <text class="todo-del" catchtap="delTodoItem" data-id="{{item._id}}">✕</text>
+        </view>
+      </view>
+    </view>
+    </view>
+  </block>
+</view>

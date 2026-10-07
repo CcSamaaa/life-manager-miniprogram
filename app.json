@@ -1,0 +1,58 @@
+{
+  "pages": [
+    "pages/today/today",
+    "pages/habits/habits",
+    "pages/bill/bill",
+    "pages/feature/feature",
+    "pages/training/training",
+    "pages/training/session",
+    "pages/memo/memo",
+    "pages/memo/edit",
+    "pages/food/food",
+    "pages/mine/mine",
+    "pages/period/period",
+    "pages/schedule/schedule",
+    "pages/emotion/emotion",
+    "pages/whattoeat/whattoeat"
+  ],
+  "window": {
+    "navigationBarBackgroundColor": "#ffffff",
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "习惯打卡",
+    "backgroundColor": "#f5f6f8",
+    "enablePullDownRefresh": false
+  },
+  "tabBar": {
+    "color": "#9aa0a6",
+    "selectedColor": "#07c160",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/today/today",
+        "text": "今天",
+        "iconPath": "assets/tabbar/today.png",
+        "selectedIconPath": "assets/tabbar/today-active.png"
+      },
+      {
+        "pagePath": "pages/feature/feature",
+        "text": "功能",
+        "iconPath": "assets/tabbar/feature.png",
+        "selectedIconPath": "assets/tabbar/feature-active.png"
+      },
+      {
+        "pagePath": "pages/mine/mine",
+        "text": "我的",
+        "iconPath": "assets/tabbar/mine.png",
+        "selectedIconPath": "assets/tabbar/mine-active.png"
+      }
+    ]
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents",
+  "navigateToMiniProgramAppIdList": [
+    "wxbcad394bacd51cfb",
+    "wx7643d5f831302ab0"
+  ]
+}

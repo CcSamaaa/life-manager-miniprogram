@@ -1,0 +1,112 @@
+<view class="page {{theme}}">
+  <!-- 状态卡 -->
+  <view class="status-card {{statusType}}">
+    <view class="sc-title">经期记录</view>
+    <view class="sc-status">{{statusText}}</view>
+    <view class="sc-meta">平均周期 {{avgCycle}} 天 · 平均经期 {{avgLength}} 天</view>
+  </view>
+
+  <!-- 操作按钮 -->
+  <view class="actions">
+    <button wx:if="{{!ongoing}}" class="btn primary" bindtap="recordToday">🩸 记录今天来月经</button>
+    <button wx:else class="btn end" bindtap="endToday">✅ 结束本次经期（今天）</button>
+    <view class="btn-text" bindtap="openAdd">＋ 添加历史记录</view>
+    <view class="btn-text" bindtap="openSetting">⚙️ 周期设置</view>
+  </view>
+
+  <!-- 日历 -->
+  <view class="cal-card">
+    <view class="cal-head">
+      <text class="nav" bindtap="prevMonth">‹</text>
+      <text class="cal-month">{{monthLabel}}</text>
+      <text class="nav" bindtap="nextMonth">›</text>
+    </view>
+    <view class="cal-week">
+      <text class="wk">日</text><text class="wk">一</text><text class="wk">二</text>
+      <text class="wk">三</text><text class="wk">四</text><text class="wk">五</text><text class="wk">六</text>
+    </view>
+    <view class="cal-grid">
+      <view
+        wx:for="{{calendar}}"
+        wx:for-item="week"
+        wx:key="index"
+        class="cal-week-row"
+      >
+        <view
+          wx:for="{{week}}"
+          wx:for-item="cell"
+          wx:key="ds"
+          class="cal-cell {{cell.other ? 'other' : ''}} {{cell.state}} {{cell.isToday ? 'today' : ''}}"
+          data-ds="{{cell.ds}}"
+          bindtap="tapDay"
+        >
+          <text wx:if="{{cell.day}}">{{cell.day}}</text>
+        </view>
+      </view>
+    </view>
+    <view class="cal-legend">
+      <text class="lg period">经期</text>
+      <text class="lg predicted">预测</text>
+      <text class="lg fertile">易孕期</text>
+    </view>
+  </view>
+
+  <!-- 历史记录 -->
+  <view class="hist-card">
+    <view class="hist-title">历史记录</view>
+    <view wx:if="{{histories.length === 0}}" class="empty">还没有记录，点击上方按钮开始吧</view>
+    <view
+      wx:for="{{histories}}"
+      wx:key="_id"
+      class="hist-item"
+    >
+      <view class="hist-main">
+        <view class="hist-date">{{item.start}}<text wx:if="{{item.end}}"> ~ {{item.end}}</text></view>
+        <view class="hist-sub">
+          <text wx:if="{{item.len}}">经期 {{item.len}} 天</text>
+          <text wx:if="{{item.interval}}" class="dot">· 间隔 {{item.interval}} 天</text>
+          <text wx:if="{{!item.end}}" class="dot ongoing">· 进行中</text>
+        </view>
+      </view>
+      <text class="hist-del" catchtap="delPeriod" data-id="{{item._id}}">删除</text>
+    </view>
+  </view>
+
+  <!-- 添加弹窗 -->
+  <view wx:if="{{showAdd}}" class="mask" bindtap="closeAdd">
+    <view class="sheet" catchtap="noop">
+      <view class="sheet-title">添加历史记录</view>
+      <view class="sheet-row">
+        <text class="sl">开始</text>
+        <input class="si" type="text" value="{{addStart}}" placeholder="YYYY-MM-DD" bindinput="onAddStart" />
+      </view>
+      <view class="sheet-row">
+        <text class="sl">结束</text>
+        <input class="si" type="text" value="{{addEnd}}" placeholder="YYYY-MM-DD（可同开始）" bindinput="onAddEnd" />
+      </view>
+      <view class="sheet-btns">
+        <button class="sb cancel" bindtap="closeAdd">取消</button>
+        <button class="sb ok" bindtap="confirmAdd">保存</button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 设置弹窗 -->
+  <view wx:if="{{showSetting}}" class="mask" bindtap="closeSetting">
+    <view class="sheet" catchtap="noop">
+      <view class="sheet-title">周期设置</view>
+      <view class="sheet-row">
+        <text class="sl">平均周期</text>
+        <input class="si" type="number" value="{{setCycle}}" placeholder="天" bindinput="onSetCycle" />
+      </view>
+      <view class="sheet-row">
+        <text class="sl">经期长度</text>
+        <input class="si" type="number" value="{{setLength}}" placeholder="天" bindinput="onSetLength" />
+      </view>
+      <view class="sheet-btns">
+        <button class="sb cancel" bindtap="closeSetting">取消</button>
+        <button class="sb ok" bindtap="saveSetting">保存</button>
+      </view>
+    </view>
+  </view>
+</view>

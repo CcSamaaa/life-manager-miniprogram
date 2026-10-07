@@ -1,0 +1,93 @@
+<view class="page {{theme}}">
+  <!-- 日历卡片 -->
+  <view class="cal-card">
+    <view class="cal-head">
+      <text class="nav-btn" bindtap="prevMonth">‹</text>
+      <view class="cal-title">{{year}} 年 {{month}} 月</view>
+      <text class="nav-btn" bindtap="nextMonth">›</text>
+    </view>
+    <view class="cal-week">
+      <text wx:for="{{weekHeaders}}" wx:key="*this" class="wk">{{item}}</text>
+    </view>
+    <view class="cal-grid">
+      <view
+        wx:for="{{cells}}"
+        wx:key="date"
+        class="cell {{item.inMonth ? '' : 'out'}} {{item.isToday ? 'today' : ''}} {{item.date === selectedDate ? 'sel' : ''}}"
+        data-date="{{item.date}}"
+        bindtap="selectDate">
+        <view class="day">{{item.day}}</view>
+        <view wx:if="{{item.color}}" class="mood-dot" style="background:{{item.color}}"></view>
+      </view>
+    </view>
+    <view class="cal-foot">
+      <text class="back-today" bindtap="backToday">回到本月</text>
+    </view>
+  </view>
+
+  <!-- 选中日心情编辑 -->
+  <view class="panel">
+    <view class="panel-head">
+      <text class="ph-date">{{selectedDate}}</text>
+      <text class="ph-tip">心情日记</text>
+    </view>
+
+    <view class="mood-grid">
+      <view
+        wx:for="{{allMoods}}"
+        wx:key="key"
+        class="mood-chip {{item.key === selectedKey ? 'active' : ''}}"
+        data-key="{{item.key}}"
+        bindtap="selectMood">
+        <view class="mood-dot" style="background:{{item.color}}"></view>
+        <text class="mood-label">{{item.label}}</text>
+      </view>
+      <view class="mood-chip add" bindtap="openAddMood">
+        <text class="mood-plus">＋</text>
+        <text class="mood-label">自定义</text>
+      </view>
+    </view>
+
+    <textarea
+      class="note-input"
+      value="{{note}}"
+      placeholder="写点今天的感受…（选完心情后点「保存」）"
+      placeholder-class="note-ph"
+      bindinput="onNoteInput"
+      maxlength="500" />
+
+    <view class="row-actions">
+      <text class="save-btn" bindtap="saveLog">保存</text>
+      <text wx:if="{{selectedKey}}" class="del-btn" bindtap="delLog">删除这天</text>
+    </view>
+  </view>
+
+  <view class="hint">点击日历上的日期，记录当天的心情色彩</view>
+
+  <!-- 自定义心情弹窗 -->
+  <view wx:if="{{showAdd}}" class="modal-mask" bindtap="closeAdd">
+    <view class="modal" catchtap="noop">
+      <view class="modal-title">自定义心情</view>
+      <input
+        class="modal-input"
+        value="{{newLabel}}"
+        placeholder="心情名称（最多6字）"
+        placeholder-class="modal-ph"
+        maxlength="6"
+        bindinput="onNewLabel" />
+      <view class="color-row">
+        <view
+          wx:for="{{palette}}"
+          wx:key="*this"
+          class="color-swatch {{newColor === item ? 'on' : ''}}"
+          style="background:{{item}}"
+          data-color="{{item}}"
+          bindtap="pickColor"></view>
+      </view>
+      <view class="modal-actions">
+        <text class="m-cancel" bindtap="closeAdd">取消</text>
+        <text class="m-ok" bindtap="confirmAddMood">确定</text>
+      </view>
+    </view>
+  </view>
+</view>

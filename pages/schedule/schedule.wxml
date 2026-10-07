@@ -1,0 +1,58 @@
+<view class="page {{theme}}">
+  <!-- 日历卡片 -->
+  <view class="cal-card">
+    <view class="cal-head">
+      <text class="nav-btn" bindtap="prevMonth">‹</text>
+      <view class="cal-title">{{year}} 年 {{month}} 月</view>
+      <text class="nav-btn" bindtap="nextMonth">›</text>
+    </view>
+    <view class="cal-week">
+      <text wx:for="{{weekHeaders}}" wx:key="*this" class="wk">{{item}}</text>
+    </view>
+    <view class="cal-grid">
+      <view
+        wx:for="{{cells}}"
+        wx:key="date"
+        class="cell {{item.inMonth ? '' : 'out'}} {{item.isToday ? 'today' : ''}} {{item.date === selectedDate ? 'sel' : ''}}"
+        data-date="{{item.date}}"
+        bindtap="selectDate">
+        <view class="day">{{item.day}}</view>
+        <view wx:if="{{item.hasTodo}}" class="badge {{item.done === item.total ? 'all-done' : ''}}">
+          <text class="b-text">{{item.done}}/{{item.total}}</text>
+        </view>
+      </view>
+    </view>
+    <view class="cal-foot">
+      <text class="back-today" bindtap="backToday">回到本月</text>
+    </view>
+  </view>
+
+  <!-- 选中日待办 -->
+  <view class="panel">
+    <view class="panel-head">
+      <text class="ph-date">{{selectedDate}}</text>
+      <text class="ph-tip">当日待办</text>
+    </view>
+
+    <view class="add-row">
+      <input
+        class="add-input"
+        value="{{todoInput}}"
+        placeholder="为这天添加待办…"
+        placeholder-class="add-ph"
+        bindinput="onInput"
+        bindconfirm="addTodo"
+        confirm-type="done" />
+      <text class="add-btn" catchtap="addTodo">添加</text>
+    </view>
+
+    <view wx:if="{{selectedTodos.length === 0}}" class="muted center empty">这一天还没有安排，添加一条吧</view>
+    <view wx:for="{{selectedTodos}}" wx:key="_id" class="todo-item">
+      <view class="todo-check {{item.done ? 'done' : ''}}" catchtap="toggleTodo" data-id="{{item._id}}">{{item.done ? '✓' : ''}}</view>
+      <text class="todo-text {{item.done ? 'done' : ''}}" catchtap="toggleTodo" data-id="{{item._id}}">{{item.text}}</text>
+      <text class="todo-del" catchtap="delTodo" data-id="{{item._id}}">✕</text>
+    </view>
+  </view>
+
+  <view class="hint">在「今天」的待办事项中，会自动显示当天的日程</view>
+</view>

@@ -1,0 +1,83 @@
+<view class="page {{theme}}">
+  <!-- 月份 + 汇总 -->
+  <view class="summary card">
+    <view class="month">{{monthLabel}}</view>
+    <view class="balance">
+      <view class="b-num">¥ {{summary.balance}}</view>
+      <view class="b-label">本月结余</view>
+    </view>
+    <view class="io">
+      <view class="io-item">
+        <view class="io-num out">-¥{{summary.expense}}</view>
+        <view class="io-label">支出</view>
+      </view>
+      <view class="io-item">
+        <view class="io-num in">+¥{{summary.income}}</view>
+        <view class="io-label">收入</view>
+      </view>
+    </view>
+  </view>
+
+  <view wx:if="{{loading}}" class="muted center loading">加载中…</view>
+
+  <view wx:elif="{{groups.length === 0}}" class="empty muted center">
+    <view>本月还没有记账</view>
+    <view>点右下角 + 记一笔吧</view>
+  </view>
+
+  <view wx:else>
+    <view wx:for="{{groups}}" wx:key="date" class="group">
+      <view class="group-head">
+        <text class="g-date">{{item.date}}</text>
+        <text class="g-week">{{item.weekday}}</text>
+      </view>
+      <view
+        wx:for="{{item.items}}"
+        wx:for-item="b"
+        wx:key="_id"
+        class="bill-row"
+        bindtap="delBill"
+        data-id="{{b._id}}"
+      >
+        <view class="b-emoji">{{b.emoji}}</view>
+        <view class="b-info">
+          <view class="b-name">{{b.name}}</view>
+          <view wx:if="{{b.note}}" class="b-note">{{b.note}}</view>
+        </view>
+        <view class="b-amount {{b.type === 'income' ? 'in' : 'out'}}">
+          {{b.type === 'income' ? '+' : '-'}}¥{{b.amount}}
+        </view>
+      </view>
+    </view>
+    <view class="tip muted center">点击任意记录可删除</view>
+  </view>
+
+  <!-- 悬浮加号 -->
+  <view class="fab" bindtap="openAdd">+</view>
+
+  <!-- 新增弹层 -->
+  <view wx:if="{{showAdd}}" class="mask" bindtap="closeAdd">
+    <view class="sheet" catchtap="noop">
+      <view class="sheet-title">记一笔</view>
+      <view class="seg">
+        <view class="seg-item {{form.type === 'expense' ? 'on' : ''}}" bindtap="pickType" data-type="expense">支出</view>
+        <view class="seg-item {{form.type === 'income' ? 'on' : ''}}" bindtap="pickType" data-type="income">收入</view>
+      </view>
+      <view class="cats">
+        <view
+          wx:for="{{categories}}"
+          wx:key="key"
+          class="cat {{form.catKey === item.key ? 'on' : ''}}"
+          bindtap="pickCat"
+          data-key="{{item.key}}"
+        >
+          <text class="cat-emoji">{{item.emoji}}</text>
+          <text class="cat-name">{{item.name}}</text>
+        </view>
+      </view>
+      <input class="amount-input" type="digit" placeholder="金额" value="{{form.amount}}" bindinput="onAmount" />
+      <input class="note-input" placeholder="备注（可选）" value="{{form.note}}" bindinput="onNote" />
+      <button class="btn-primary save-btn" bindtap="saveBill">保存</button>
+    </view>
+  </view>
+</view>
