@@ -82,8 +82,7 @@
     </view>
 
     <!-- 黄历 -->
-    <!-- AUDIT-HIDDEN 占卜内容（黄历+每日一签入口），过审后删除下一行的 wx:if="{{false}}" 即可恢复 -->
-    <view class="card" style="order:{{cardOrder.almanac}}" wx:if="{{false}}">
+    <view class="card" style="order:{{cardOrder.almanac}}">
       <view class="card-head" bindtap="toggleAlmanac">
         <view class="card-title"><text class="ic">📅</text> 黄历</view>
         <view class="head-right">

@@ -10,15 +10,15 @@ const MOVE_CANCEL_PX = 10;   // 长按判定期间移动超过该值则视为滚
 const FEATURES = [
   { key: 'habit', icon: '✅', name: '习惯打卡', desc: '每日打卡 · 连续记录', path: '/pages/habits/habits' },
   { key: 'bill', icon: '🧾', name: '记账', desc: '收支明细 · 月度汇总', path: '/pages/bill/bill' },
-  // { key: 'bazi', icon: '☯️', name: '八字', desc: '四柱排盘 · 五行参考', path: '/pages/bazi/bazi' }, // AUDIT-HIDDEN 占卜类，过审后取消注释恢复
-  // { key: 'liuyao', icon: '🎲', name: '六爻', desc: '三骰成卦 · 纳甲断卦', path: '/pages/liuyao/liuyao' }, // AUDIT-HIDDEN 占卜类，过审后取消注释恢复
+  { key: 'bazi', icon: '☯️', name: '八字', desc: '四柱排盘 · 五行参考', path: '/pages/bazi/bazi' },
+  { key: 'liuyao', icon: '🎲', name: '六爻', desc: '三骰成卦 · 纳甲断卦', path: '/pages/liuyao/liuyao' },
   { key: 'training', icon: '🏋️', name: '训练规划', desc: '计划模板 · 训练记录', path: '/pages/training/training' },
   { key: 'memo', icon: '🪄', name: '灵感记录', desc: '随时记录 · 云端同步', path: '/pages/memo/memo' },
   { key: 'food', icon: '🍱', name: '食物热量', desc: '拍照识别 · AI 算热量', path: '/pages/food/food' },
   { key: 'whattoeat', icon: '🍽️', name: '今天吃什么', desc: '日历规划 · 想吃就记', path: '/pages/whattoeat/whattoeat' },
   { key: 'period', icon: '🌸', name: '经期记录', desc: '周期预测 · 日历记录', path: '/pages/period/period' },
-  // { key: 'tarot', icon: '🔮', name: '塔罗', desc: '选牌阵 · 抽牌解签', path: '/pages/tarot/tarot' }, // AUDIT-HIDDEN 占卜类，过审后取消注释恢复
-  // { key: 'sign', icon: '🎴', name: '每日一签', desc: '选签筒 · 今日运势', path: '/pages/sign/sign' }, // AUDIT-HIDDEN 占卜类，过审后取消注释恢复
+  { key: 'tarot', icon: '🔮', name: '塔罗', desc: '选牌阵 · 抽牌解签', path: '/pages/tarot/tarot' },
+  { key: 'sign', icon: '🎴', name: '每日一签', desc: '选签筒 · 今日运势', path: '/pages/sign/sign' },
   { key: 'schedule', icon: '🗓️', name: '日程安排', desc: '日历排程 · 到期提醒', path: '/pages/schedule/schedule' },
   { key: 'emotion', icon: '🎨', name: '情绪日记', desc: '记录每天的心情色彩', path: '/pages/emotion/emotion' },
   { key: 'cainiao', icon: '📦', name: '菜鸟驿站', desc: '跳转查件 · 取件码', miniapp: 'cainiao' },

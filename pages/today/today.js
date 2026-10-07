@@ -154,7 +154,7 @@ Page({
     }));
 
     const now = new Date();
-    // const almanac = getAlmanac(now.getFullYear(), now.getMonth() + 1, now.getDate()); // AUDIT-HIDDEN 占卜数据，过审后取消注释恢复
+    const almanac = getAlmanac(now.getFullYear(), now.getMonth() + 1, now.getDate());
 
     // ===== 热量计算 =====
     let calState = {
@@ -183,7 +183,7 @@ Page({
       habitTotal: list.length,
       habitRemaining: list.filter(h => !h.doneToday).length,
       today,
-      // almanac, // AUDIT-HIDDEN 占卜数据，过审后取消注释恢复
+      almanac,
       ...calState,
       todos,
       todoTotal,
@@ -304,7 +304,7 @@ Page({
   goMine() { wx.switchTab({ url: '/pages/mine/mine' }); },
   goFood() { wx.navigateTo({ url: '/pages/food/food' }); },
   goTraining() { wx.navigateTo({ url: '/pages/training/training' }); },
-  // goSign() { wx.navigateTo({ url: '/pages/sign/sign' }); }, // AUDIT-HIDDEN 占卜入口，过审后取消注释恢复
+  goSign() { wx.navigateTo({ url: '/pages/sign/sign' }); },
   toggleWeather() {
     const open = !this.data.weatherOpen;
     this.setData({ weatherOpen: open });

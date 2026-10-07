@@ -13,7 +13,11 @@
     "pages/period/period",
     "pages/schedule/schedule",
     "pages/emotion/emotion",
-    "pages/whattoeat/whattoeat"
+    "pages/whattoeat/whattoeat",
+    "pages/bazi/bazi",
+    "pages/liuyao/liuyao",
+    "pages/tarot/tarot",
+    "pages/sign/sign"
   ],
   "window": {
     "navigationBarBackgroundColor": "#ffffff",
