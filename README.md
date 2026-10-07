@@ -8,6 +8,21 @@
 
 ---
 
+## 界面预览
+
+<p align="center">
+  <img src="docs/screenshots/01-today.png" width="30%" />
+  <img src="docs/screenshots/02-today.png" width="30%" />
+  <img src="docs/screenshots/03-today.png" width="30%" />
+</p>
+
+<p align="center">
+  <img src="docs/screenshots/04-today.png" width="30%" />
+  <img src="docs/screenshots/05-today.png" width="30%" />
+</p>
+
+<p align="center"><sub>截图取自微信开发者工具模拟器</sub></p>
+
 ## 功能模块
 
 首页「今天」聚合当天最常看的信息，其余功能收在「功能」页，两处都支持自定义排序。
